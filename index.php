@@ -75,7 +75,7 @@ switch ($action) {
     //$signup->signupAccount($username, $password);
     
     //Send to success page if it works
-    $message = "<h1>You have successfully signed up!</h1>";
+    $message = "<p id='greenText'>You have successfully signed up!</p>";
     include('./view/result_page.php');
     break;
 
@@ -106,11 +106,11 @@ switch ($action) {
     accountDB::loginAccount($username, $password);
     //Gets data and makes class
     $user = accountDB::getUser($username);
-    $account = new account($user['accountID'], $user['username']);
+    $account = new account($user['accountID'], $user['username'], $user['accountType'], $user['fname'], $user['lname']);
     //Send to success page if it works
-    $message = "<h1>You have successfully logged in!</h1>
-       <p>Welcome, ". $account->getUsername(). "!<br>".
-        "Account Type: ". $_SESSION['accountType'].
+    $message = "<p id='greenText'>You have successfully logged in!</p>
+       <p>Welcome, ". $account->getUsername(). "<br>".
+//        "Account Type: ". $_SESSION['accountType'].
         "</p>";
     include("./view/result_page.php");
     
