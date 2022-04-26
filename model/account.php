@@ -8,13 +8,15 @@ class account {
     private $accountID;
     private $username;
     private $accountType;
+    private $email;
     private $fname;
     private $lname;
 
-    public function __construct($accountID, $username, $accountType, $fname, $lname) {
+    public function __construct($accountID, $username, $accountType, $email, $fname, $lname) {
         $this->accountID = $accountID;
         $this->username = $username;
         $this->accountType = $accountType;
+        $this->email = $email;
         $this->fname = $fname;
         $this->lname = $lname;
     }
@@ -29,6 +31,10 @@ class account {
 
     public function getAccountType() {
         return $this->accountType;
+    }
+
+    public function getEmail() {
+        return $this->email;
     }
 
     public function getFname() {
@@ -49,6 +55,10 @@ class account {
 
     public function setAccountType($accountType): void {
         $this->accountType = $accountType;
+    }
+
+    public function setEmail($email): void {
+        $this->email = $email;
     }
 
     public function setFname($fname): void {

@@ -106,7 +106,7 @@ switch ($action) {
     accountDB::loginAccount($username, $password);
     //Gets data and makes class
     $user = accountDB::getUser($username);
-    $account = new account($user['accountID'], $user['username'], $user['accountType'], $user['fname'], $user['lname']);
+    $account = new account($user['accountID'], $user['username'], $user['accountType'], $user['email'], $user['fname'], $user['lname']);
     //Send to success page if it works
     $message = "<p id='greenText'>You have successfully logged in!</p>
        <p>Welcome, ". $account->getUsername(). "<br>".
