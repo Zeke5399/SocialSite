@@ -6,6 +6,7 @@ session_start();
 
     include ('db/dbh.php');
     include ('model/validation.php');
+    include ('mail/mailer.php');
     
     include ('model/account.php');
     
@@ -85,10 +86,17 @@ switch ($action) {
         exit();
     }
     
+    //Generate Vkey
+    $vkey = md5(time().$username);
+    
+    //Send email to verify account
+    mailer::sendMail($email, $vkey);
+    
     //Put data into class
     //$signup = new account($username, $password);
     //Call a signup method
-    accountDB::signupAccount($username, $email, $password);
+    //accountDB::signupAccount($username, $email, $password);
+    
     //$signup->signupAccount($username, $password);
     
     //Send to success page if it works
