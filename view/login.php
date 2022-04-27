@@ -13,7 +13,7 @@
         <br><br>
 
         <label for="password">Password</label>
-        <input id="password" name="password" type="text" value="<?php if(isset($password)) { echo $password;} ?>">
+        <input id="password" name="password" type="password" value="<?php if(isset($password)) { echo $password;} ?>">
         <span id='redText'><?php if(isset($passwordError)) { echo $passwordError;} ?></span>
         <br><br>
 

@@ -36,7 +36,7 @@ class accountDB {
         }
     }
     
-    public static function signupAccount($username, $password)
+    public static function signupAccount($username, $email, $password)
     {
         //This function should get called after validation takes place 
         //in the signup.php controller.
@@ -44,13 +44,14 @@ class accountDB {
         //connection to database
         $db = dbh::getDB();
         //prepared query
-        $query = ('INSERT INTO account (username, password) VALUES (:username, :password)');
+        $query = ('INSERT INTO account (username, email, password) VALUES (:username, :email, :password)');
         //prepated statement
         $statement = $db->prepare($query);
         //hash password
         $hashedPwd = sha1($password);
         //bind values
         $statement->bindValue(':username', $username);
+        $statement->bindValue(':email', $email);
         $statement->bindValue(':password', $hashedPwd);
         //test execute
         try {
@@ -68,6 +69,28 @@ class accountDB {
         $query = ('SELECT * FROM account WHERE username = :username');
         $statement = $db->prepare($query);
         $statement->bindValue(':username', $username);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $resultCheck;
+        if($statement->rowCount() > 0) {
+            $resultCheck = true;
+	}
+	else {
+            $resultCheck = false;
+	}
+        $statement->closeCursor();
+	return $resultCheck;
+    }
+    
+    public static function checkEmail($email) {
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM account WHERE email = :email');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':email', $email);
         try {
             $statement->execute();
         } catch (Exception $e) {

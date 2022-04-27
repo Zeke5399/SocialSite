@@ -51,6 +51,17 @@ class validation {
 	return $result;
     }
     
+    public static function emailTaken($value) {
+	$result;
+	if(accountDB::checkEmail($value)) {
+            $result = true;
+	}
+	else {
+            $result = false;
+	}
+	return $result;
+    }
+    
     public static function usernameLength($value) {
         $result;
 	if(strlen($value) > 15) {
@@ -91,5 +102,16 @@ class validation {
             $result = false;
 	}
 	return $result;
+    }
+    
+    public static function validEmail($value) {
+        $result;
+        if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            $result = true;
+        }
+        else {
+            $result = false;
+        }
+        return $result;
     }
 }

@@ -12,8 +12,13 @@
         <span id='redText'><?php if(isset($usernameError)) { echo $usernameError;} ?></span>
         <br><br>
 
+        <label for="email">E-Mail</label>
+        <input id="email" name="email" type="email" value="<?php if(isset($email)) { echo $email;} ?>">
+        <span id='redText'><?php if(isset($emailError)) { echo $emailError;} ?></span>
+        <br><br>
+        
         <label for="password">Password</label>
-        <input id="password" name="password" type="text" value="<?php if(isset($password)) { echo $password;} ?>">
+        <input id="password" name="password" type="password" value="<?php if(isset($password)) { echo $password;} ?>">
         <span id='redText'><?php if(isset($passwordError)) { echo $passwordError;} ?></span>
         <br><br>
 
