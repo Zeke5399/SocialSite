@@ -46,6 +46,9 @@ p {
 #greenText {color: green;}
 #redText {color: red;}
 
+#right {float: right; width: 50%;}
+#left {margin-right: 50%;}
+
 a {
     text-decoration: none;
     transition: 0.5s;

@@ -7,16 +7,16 @@
 class account {
     private $accountID;
     private $username;
-    private $accountType;
     private $email;
+    private $accountType;
     private $fname;
     private $lname;
 
-    public function __construct($accountID, $username, $accountType, $email, $fname, $lname) {
+    public function __construct($accountID, $username, $email, $accountType, $fname, $lname) {
         $this->accountID = $accountID;
         $this->username = $username;
-        $this->accountType = $accountType;
         $this->email = $email;
+        $this->accountType = $accountType;
         $this->fname = $fname;
         $this->lname = $lname;
     }
@@ -29,12 +29,12 @@ class account {
         return $this->username;
     }
 
-    public function getAccountType() {
-        return $this->accountType;
-    }
-
     public function getEmail() {
         return $this->email;
+    }
+
+    public function getAccountType() {
+        return $this->accountType;
     }
 
     public function getFname() {
@@ -53,12 +53,12 @@ class account {
         $this->username = $username;
     }
 
-    public function setAccountType($accountType): void {
-        $this->accountType = $accountType;
-    }
-
     public function setEmail($email): void {
         $this->email = $email;
+    }
+
+    public function setAccountType($accountType): void {
+        $this->accountType = $accountType;
     }
 
     public function setFname($fname): void {
