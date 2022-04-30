@@ -3,7 +3,7 @@
 <main>
     <p>Register</p>
     
-    <form action="index.php" method="POST">
+    <form action="" method="POST">
         <fieldset>
         <input type="hidden" name="action" value="register-action">
             
@@ -25,6 +25,8 @@
         <button id="submitButton" name="registerSubmit" type="submit">Register</button><br>
         </fieldset>
     </form>
+    
+    <?php if(isset($message)) {echo $message;}?>
     
 </main>
 

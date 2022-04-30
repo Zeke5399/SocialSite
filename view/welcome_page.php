@@ -1,7 +1,7 @@
 <?php include_once './view/header.php'; ?>
 
 <main>
-    <p>Home</p>
+    <p>Home - Still a work in progress.</p>
 </main>
 
 <?php include './view/footer.php'; ?>

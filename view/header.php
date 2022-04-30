@@ -12,22 +12,29 @@
         <h1>Social Site
         -
         <?php
-            $currentDateTime = date('Y-m-d H:i:s');
+//            $currentDateTime = date('Y-m-d H:i:s');
+            $currentDateTime = date('m-d-Y');
             echo $currentDateTime;
         ?>
         </h1>
     </header>
     <nav>
-        <a href="./index.php?action=welcome_page">Home</a>&nbsp;-&nbsp;
-        <a href="./index.php?action=register">Register</a>&nbsp;-&nbsp;
+        <a href="./index.php?action=welcome_page">Home</a>&nbsp;-
         <?php
             if (isset($_SESSION['accountID']))
             {
-                echo '<a href="./index.php?action=logout">Logout</a> &nbsp; &nbsp;';
+                echo '<a href="./index.php?action=profile">Profile</a>&nbsp;-';
+            }
+        ?>
+        <a href="./index.php?action=register">Register</a>&nbsp;-
+        <?php
+            if (isset($_SESSION['accountID']))
+            {
+                echo '<a href="./index.php?action=logout">Logout</a>';
             }
             else
             {
-                echo '<a href="./index.php?action=login">Login</a> &nbsp; &nbsp;';
+                echo '<a href="./index.php?action=login">Login</a>';
             }
         ?>
     </nav>

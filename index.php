@@ -38,6 +38,13 @@ switch ($action) {
     $usernameError = "";
     $emailError = "";
     $passwordError = "";
+    
+    $stage = filter_input(INPUT_POST, 'stage');
+    if(!isset($stage)) {
+        $stage = 0;
+    }
+    
+    if($stage == 0) {
     //Validate inputs
     $validator = new validation();
     if($validator->emptyInput($username)) {
@@ -92,16 +99,36 @@ switch ($action) {
     //Send email to verify account
     mailer::sendMail($email, $vkey);
     
-    //Put data into class
-    //$signup = new account($username, $password);
-    //Call a signup method
-    //accountDB::signupAccount($username, $email, $password);
-    
-    //$signup->signupAccount($username, $password);
-    
     //Send to success page if it works
-    $message = "<p id='greenText'>You have successfully signed up!</p>";
+//    $message = "<p id='greenText'>You have successfully signed up!</p>";
+    $message = "<p id='greenText'>Enter Validation Key: ". $vkey. "</p>";
+    $message .= "<form action='' method='POST'> "
+            . "<input type='hidden' name='action' value='register-action'> "
+            . "<input type='hidden' name='stage' value='1'> "
+            . "<input type='hidden' name='username' value=". $username. ">"
+            . "<input type='hidden' name='email' value=". $email. ">"
+            . "<input type='hidden' name='password' value=". $password. ">"
+            . "<input type='hidden' name='correctvkey' value=". $vkey. ">"
+            . "<input type='text' name='vkey'>"
+            . "<button id='vkeyButton' name='vkeySubmit' type='submit'>Verify</button>". "<form><br><br>";
+    include('./view/register.php');
+    }
+    
+    if($stage == 1) {
+        
+    $vkey = filter_input(INPUT_POST, 'vkey');
+    $correctvkey = filter_input(INPUT_POST, 'correctvkey');
+    
+    if ($vkey == $correctvkey) {
+        accountDB::signupAccount($username, $email, $password);
+        $message = "<p id='greenText'>Correct key</p><p>Your account has been set up.</p>";
+    } else {
+        $message = "<p id='redText'>Wrong key.</p><p>Please try again.</p>";
+    }
     include('./view/result_page.php');
+    
+    }
+    
     break;
 
     case 'login':
@@ -146,6 +173,11 @@ switch ($action) {
     session_unset();
     session_destroy();
     header("Location: ./index.php");
+    break;
+
+    case 'profile':
+    $info = accountDB::getUserByID($_SESSION['accountID']);
+    include("./view/profile.php");
     break;
 
 }
