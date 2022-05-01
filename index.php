@@ -181,5 +181,112 @@ switch ($action) {
     include("./view/profile.php");
     break;
 
+    case 'account-details-action':
+    $user = accountDB::getUserByID($_SESSION['accountID']);
+    $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        
+    $fname = filter_input(INPUT_POST, 'fname');
+    $lname = filter_input(INPUT_POST, 'lname');
+    
+    $firstnameError = "";
+    $lastnameError = "";
+    //Validate inputs
+    $validator = new validation();
+    if($validator->emptyInput($fname)) {
+        $fnameError = "First name is empty!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->emptyInput($lname)) {
+        $lnameError = "Last name is empty!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->nameLength($fname)) {
+        $fnameError = "First name can not be longer than 25 characters!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->nameLength($lname)) {
+        $lnameError = "Last name can not be longer than 25 characters!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->validName($fname)) {
+        $fnameError = "Please correct the formatting for your first name!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->validName($lname)) {
+        $lnameError = "Please correct the formatting for your last name!";
+        include("./view/profile.php");
+        exit();
+    }
+    
+    accountDB::updateDetails($_SESSION['accountID'], $fname, $lname);
+    
+    $message = "<p id='greenText'>Account updated successfully!</p>
+       <p>". $fname. " ". $lname. "</p>";
+    include('./view/result_page.php');
+    break;
+
+    case 'account-update-action':
+    $user = accountDB::getUserByID($_SESSION['accountID']);
+    $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        
+    $username = filter_input(INPUT_POST, 'username');
+    $password = filter_input(INPUT_POST, 'password');
+    
+    $usernameError = "";
+    $passwordError = "";
+    //Validate inputs
+    $validator = new validation();
+    if($validator->emptyInput($username)) {
+        $usernameError = "Username is empty!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->emptyInput($password)) {
+        $passwordError = "Password is empty!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->validName($username)) {
+        $usernameError = "Please correct the formatting for your username!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->usernameLength($username)) {
+        $usernameError = "Your username must be between 4-15 characters!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->passwordLength($password)) {
+        $passwordError = "Your password must be between 10-20 characters!";
+        include("./view/profile.php");
+        exit();
+    }
+    if($validator->usernameTaken($username)) {
+        $usernameError = "Username taken!";
+        include("./view/profile.php");
+        exit();
+    }
+
+    accountDB::updateUser($_SESSION['accountID'], $username, $password);
+    
+    $message = "<p id='greenText'>Account updated successfully!</p>
+       <p>". $username. "</p>";
+    include('./view/result_page.php');
+    break;
+    
+    case 'account-delete-action':
+        accountDB::removeUser($_SESSION['accountID']);
+//        session_start();
+        session_unset();
+        session_destroy();
+        $message = "<p id='greenText'>Account deleted successfully!</p>";
+        include('./view/result_page.php');
+    break;
+    
 }
 ?>

@@ -3,6 +3,28 @@
 <main>
     <p>Welcome, <?php echo $account->getUsername(); ?></p>
     <p>Email: <?php echo $account->getEmail(); ?></p>
+    <?php if($account->getFname() != "" && $account->getLname() != "") { echo "<p>Name: ". $account->getFname(). " ". $account->getLname(). "</p>"; } ?>
+    
+    <div id="right">
+        <fieldset>
+        <h3>Posts</h3>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        </fieldset>
+    </div>
     
     <div id="left">
     <form action="" method="POST">
@@ -10,14 +32,14 @@
         <h3>Update Account Details</h3>
         <input type="hidden" name="action" value="account-details-action">
         
-        <label for="firstname">First Name</label>
-        <input id="firstname" name="firstname" type="text" value="<?php if(isset($firstName)) { echo $firstName;} elseif($_SESSION['accountType'] != "null") { echo $account->getFirstName();} ?>">
-        <span><?php if(isset($firstnameError)) { echo $firstnameError;} ?></span>
+        <label for="fname">First Name</label>
+        <input id="fname" name="fname" type="text" value="<?php if(isset($fname)) { echo $fname;} elseif($account->getFname() != "") { echo $account->getFname();} ?>">
+        <span><?php if(isset($fnameError)) { echo $fnameError;} ?></span>
         <br><br>
 
-        <label for="lastname">Last Name</label>
-        <input id="lastname" name="lastname" type="text" value="<?php if(isset($lastName)) { echo $lastName;} elseif($_SESSION['accountType'] != "null") { echo $account->getLastName();} ?>">
-        <span><?php if(isset($lastnameError)) { echo $lastnameError;} ?></span>
+        <label for="lname">Last Name</label>
+        <input id="lname" name="lname" type="text" value="<?php if(isset($lname)) { echo $lname;} elseif($account->getLname() != "") { echo $account->getLname();} ?>">
+        <span><?php if(isset($lnameError)) { echo $lnameError;} ?></span>
         <br><br>
         
         <button id="submitButton" name="detailSubmit" type="submit">Submit</button>
@@ -37,7 +59,7 @@
         <br><br>
 
         <label for="password">Password</label>
-        <input id="password" name="password" type="text" value="<?php if(isset($password)) { echo $password;} ?>">
+        <input id="password" name="password" type="password" value="<?php if(isset($password)) { echo $password;} ?>">
         <span><?php if(isset($passwordError)) { echo $passwordError;} ?></span>
         <br><br>
         

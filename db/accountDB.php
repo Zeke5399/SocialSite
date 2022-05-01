@@ -164,35 +164,51 @@ class accountDB {
         return $row;
     }
 
-//    public static function updateUser($accountID, $username, $password) {
-//        $db = dbh::getDB();
-//        $query = ('UPDATE account SET username = :username, password = :password WHERE accountID = :accountid');
-//        $statement = $db->prepare($query);
-//        $hashedPwd = sha1($password);
-//        $statement->bindValue(':username', $username);
-//        $statement->bindValue(':password', $hashedPwd);
-//        $statement->bindValue(':accountid', $accountID);
-//        try {
-//            $statement->execute();
-//        } catch (Exception $e) {
-//            include('./errors/dbError.php');
-//            exit();
-//        }
-//        $statement->closeCursor();
-//    }    
+    public static function updateDetails($accountID, $fname, $lname) {
+        $db = dbh::getDB();
+        $query = ('UPDATE account SET fname = :fname, lname = :lname WHERE accountID = :accountid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':fname', $fname);
+        $statement->bindValue(':lname', $lname);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $statement->closeCursor();
+    }
     
-//    public static function removeUser($accountID) {
-//        $db = dbh::getDB();
-//        $query = ('DELETE FROM account WHERE accountID = :accountid');
-//        $statement = $db->prepare($query);
-//        $statement->bindValue(':accountid', $accountID);
-//        try {
-//            $statement->execute();
-//        } catch (Exception $e) {
-//            include('./errors/dbError.php');
-//            exit();
-//        }
-//        $statement->closeCursor();
-//    }
+    public static function updateUser($accountID, $username, $password) {
+        $db = dbh::getDB();
+        $query = ('UPDATE account SET username = :username, password = :password WHERE accountID = :accountid');
+        $statement = $db->prepare($query);
+        $hashedPwd = sha1($password);
+        $statement->bindValue(':username', $username);
+        $statement->bindValue(':password', $hashedPwd);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $statement->closeCursor();
+    }    
+    
+    public static function removeUser($accountID) {
+        $db = dbh::getDB();
+        $query = ('DELETE FROM account WHERE accountID = :accountid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $statement->closeCursor();
+    }
     
 }
