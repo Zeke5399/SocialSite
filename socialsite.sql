@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2022 at 04:22 AM
+-- Generation Time: May 07, 2022 at 04:24 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -40,6 +40,19 @@ CREATE TABLE `account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Table structure for table `post`
+--
+
+CREATE TABLE `post` (
+  `postID` int(10) NOT NULL,
+  `accountID` int(10) NOT NULL,
+  `title` varchar(20) NOT NULL,
+  `message` varchar(250) DEFAULT NULL,
+  `privacySetting` varchar(20) NOT NULL DEFAULT 'public',
+  `postDate` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Indexes for dumped tables
 --
 
@@ -50,6 +63,12 @@ ALTER TABLE `account`
   ADD PRIMARY KEY (`accountID`);
 
 --
+-- Indexes for table `post`
+--
+ALTER TABLE `post`
+  ADD PRIMARY KEY (`postID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -58,6 +77,11 @@ ALTER TABLE `account`
 --
 ALTER TABLE `account`
   MODIFY `accountID` int(10) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `post`
+--
+ALTER TABLE `post`
+  MODIFY `postID` int(10) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
