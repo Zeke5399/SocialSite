@@ -1,4 +1,5 @@
 <?php include('./view/header.php') ?>
+    <br>
     <body>
         <div id="wrapper">
         <h2>We're sorry :(</h2>
@@ -12,4 +13,5 @@
             ?></details>
         </div>
     </body>
+    <br>
 <?php include './view/footer.php'; ?>

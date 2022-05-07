@@ -1,6 +1,7 @@
 <?php include_once './view/header.php'; ?>
 
 <main>
+    <br>
     <fieldset>
         <h3>All Posts</h3>
         <ul>

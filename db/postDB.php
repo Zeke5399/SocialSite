@@ -19,6 +19,20 @@ class postDB {
         $statement->closeCursor();
     }
 
+    public static function removePost($postID) {
+        $db = dbh::getDB();
+        $query = ('DELETE FROM post WHERE postID = :postid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':postid', $postID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $statement->closeCursor();
+    }
+    
     public static function getPostByTitle($title) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE title = :title');
@@ -83,4 +97,26 @@ class postDB {
         return $row;
     }
 
+    public static function checkPostsByAccountID($accountID) {
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE accountID = :accountid ORDER BY postDate desc');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $resultCheck;
+        if($statement->rowCount() > 0) {
+            $resultCheck = true;
+	}
+	else {
+            $resultCheck = false;
+	}
+        $statement->closeCursor();
+	return $resultCheck;
+    }
+    
 }

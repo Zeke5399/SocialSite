@@ -323,6 +323,23 @@ switch ($action) {
         postDB::addPost($_SESSION['accountID'], $title, $postmessage, $privacysetting);
 
         $message = "<p id='greenText'>Post Submitted!</p>";
+        //Refresh the list.
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        include("./view/profile.php");
+        break;
+        
+    case 'post-remove-action':
+        $user = accountDB::getUserByID($_SESSION['accountID']);
+        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+
+        $postID = filter_input(INPUT_POST, 'postid');
+
+        postDB::removePost($postID);
+
+        $message = "<p id='greenText'>Post Removed!</p>";
+        //Refresh the list.
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
         include("./view/profile.php");
         break;
 }
