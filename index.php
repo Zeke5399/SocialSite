@@ -179,12 +179,15 @@ switch ($action) {
     case 'profile':
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+
         include("./view/profile.php");
         break;
 
     case 'account-details-action':
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
 
         $fname = filter_input(INPUT_POST, 'fname');
         $lname = filter_input(INPUT_POST, 'lname');
@@ -234,6 +237,7 @@ switch ($action) {
     case 'account-update-action':
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
 
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
@@ -291,7 +295,8 @@ switch ($action) {
     case 'post-add-action':
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+
         $title = filter_input(INPUT_POST, 'title');
         $postmessage = filter_input(INPUT_POST, 'postmessage');
         $privacysetting = filter_input(INPUT_POST, 'privacysetting');
@@ -315,7 +320,7 @@ switch ($action) {
 //  Can't make object because postID and postDate have not been set yet.        
 //        $post = new post($postID, $_SESSION['accountID'], $title, $message, $privacysetting, $postDate);
         postDB::addPost($_SESSION['accountID'], $title, $postmessage, $privacysetting);
-        
+
         $message = "<p id='greenText'>Post Submitted!</p>";
         include("./view/profile.php");
         break;

@@ -1,11 +1,13 @@
 <?php include_once './view/header.php'; ?>
 
-<main>
-    <p>Welcome, <?php echo $account->getUsername(); ?></p>
-    <p>Email: <?php echo $account->getEmail(); ?></p>
-    <?php if($account->getFname() != "" && $account->getLname() != "") { echo "<p>Name: ". $account->getFname(). " ". $account->getLname(). "</p>"; } ?>
-    
+<main id="customHeight">
     <?php if(isset($message)) { echo $message; }?>
+    
+    <p>
+    Welcome, <?php echo $account->getUsername(); ?><br>
+    Email: <?php echo $account->getEmail(); ?><br>
+    <?php if($account->getFname() != "" && $account->getLname() != "") { echo "Name: ". $account->getFname(). " ". $account->getLname(); } ?>
+    </p>
     
     <div id="right">
     <form action="" method="POST">
@@ -19,7 +21,7 @@
         <br><br>
 
         <label for="postmessage">Message</label>
-        <input id="postmessage" name="message" type="text" value="<?php if(isset($postmessage)) { echo $postmessage;} ?>">
+        <input id="postmessage" name="postmessage" type="text" value="<?php if(isset($postmessage)) { echo $postmessage;} ?>">
         <span><?php if(isset($postmessageError)) { echo $postmessageError;} ?></span>
         <br><br>
         
@@ -37,7 +39,45 @@
     </form>
         
         <fieldset>
-        <h3>Posts</h3>
+        <h3>Your Posts</h3>
+            <ul>
+            <?php
+            if(isset($posts)) {
+            foreach ($posts as $post) {
+                echo "<li>";
+//                $orderID = $purchase['orderID'];
+//                $carID = $purchase['carID'];
+//                $status = invoiceDB::getStatus($_SESSION['accountID'], $carID);
+//                if(isset($status['status'])) {
+//                    if($status['status'] == "paid off") {
+//                        
+//                    } else {
+//                        include './view/cancel_order_button.php';                    
+//                    }
+//                } else {
+//                    include './view/cancel_order_button.php'; 
+//                }
+                echo "<Strong>Title:</Strong> ", $post['title'], "<br>";
+                echo "<Strong>Message:</Strong> ", $post['message'], "<br>";
+                echo "<Strong>Date:</Strong> ", $post['postDate'];
+//                if(isset($status['status'])) {
+//                    echo "<Strong>Status:</Strong> ", $status['status'], "<br>";
+//                    if($status['status'] == "approved" || $status['status'] == "denied") {
+//                    echo "<Strong>By:</Strong> ", $status['updateby'], "<br>";
+//                    }
+//                    if($status['status'] == "approved") {
+//                    echo "<Strong>Monthly Payment:</Strong> ", $status['monthlypayment'], "<br>";
+//                    echo "<Strong>Loan Term:</Strong> ", $status['loanterm'], "<br>";
+//                    include './view/payment_button.php';
+//                    }
+//                } elseif (!invoiceDB::checkInvoiceByOrder($_SESSION['accountID'], $purchase['orderID'])) {
+//                    echo "<Strong>Status:</Strong> disregarded";
+//                }
+                echo "</li>";
+            }
+            }
+            ?>
+            </ul>
         </fieldset>
     </div>
     

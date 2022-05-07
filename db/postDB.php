@@ -1,7 +1,8 @@
 <?php
+
 class postDB {
-    public static function addPost($accountID, $title, $message, $privacysetting)
-    {
+
+    public static function addPost($accountID, $title, $message, $privacysetting) {
         $db = dbh::getDB();
         $query = ('INSERT INTO post (accountID, title, message, privacySetting) VALUES (:accountID, :title, :message, :privacySetting)');
         $statement = $db->prepare($query);
@@ -17,7 +18,7 @@ class postDB {
         }
         $statement->closeCursor();
     }
-    
+
     public static function getPostByTitle($title) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE title = :title');
@@ -33,10 +34,10 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-    
-    public static function getPosts() {
+
+    public static function getAllPosts() {
         $db = dbh::getDB();
-        $query = ('SELECT * FROM post');
+        $query = ('SELECT * FROM post ORDER BY postDate desc');
         $statement = $db->prepare($query);
         try {
             $statement->execute();
@@ -48,5 +49,21 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-    
+
+    public static function getPostsByAccountID($accountID) {
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE accountID = :accountid ORDER BY postDate desc');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $statement->closeCursor();
+        return $row;
+    }
+
 }
