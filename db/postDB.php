@@ -37,8 +37,25 @@ class postDB {
 
     public static function getAllPosts() {
         $db = dbh::getDB();
-        $query = ('SELECT * FROM post ORDER BY postDate desc');
+        $query = ('SELECT * FROM post WHERE ORDER BY postDate desc');
         $statement = $db->prepare($query);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $statement->closeCursor();
+        return $row;
+    }
+    
+    public static function getAllPublicPosts() {
+        $privacySetting = "public";
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE privacySetting = :privacySetting ORDER BY postDate desc');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':privacySetting', $privacySetting);
         try {
             $statement->execute();
         } catch (Exception $e) {

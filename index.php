@@ -25,6 +25,7 @@ if ($action === null) {
 switch ($action) {
 //this will be the default display page
     case 'welcome_page':
+        $posts = postDB::getAllPublicPosts();
         include('./view/welcome_page.php');
         break;
 

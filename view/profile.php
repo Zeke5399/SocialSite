@@ -59,7 +59,8 @@
 //                }
                 echo "<Strong>Title:</Strong> ", $post['title'], "<br>";
                 echo "<Strong>Message:</Strong> ", $post['message'], "<br>";
-                echo "<Strong>Date:</Strong> ", $post['postDate'];
+                echo "<Strong>Date:</Strong> ", $post['postDate'], "<br>";
+                echo "<Strong>Privacy:</Strong> ", $post['privacySetting'];
 //                if(isset($status['status'])) {
 //                    echo "<Strong>Status:</Strong> ", $status['status'], "<br>";
 //                    if($status['status'] == "approved" || $status['status'] == "denied") {
