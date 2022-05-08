@@ -33,6 +33,24 @@ class postDB {
         $statement->closeCursor();
     }
     
+    public static function updatePost($postID, $title, $message, $privacysetting, $postUpdate) {
+        $db = dbh::getDB();
+        $query = ('UPDATE post SET title = :title, message = :message, privacySetting = :privacySetting, postUpdate = :postupdate WHERE postID = :postid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':title', $title);
+        $statement->bindValue(':message', $message);
+        $statement->bindValue(':privacySetting', $privacysetting);
+        $statement->bindValue(':postupdate', $postUpdate);
+        $statement->bindValue(':postid', $postID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $statement->closeCursor();
+    } 
+    
     public static function getPostByTitle($title) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE title = :title');
@@ -97,6 +115,22 @@ class postDB {
         return $row;
     }
 
+    public static function getPostByPostID($postID) {
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE postID = :postid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':postid', $postID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetch();
+        $statement->closeCursor();
+        return $row;
+    }
+    
     public static function checkPostsByAccountID($accountID) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE accountID = :accountid ORDER BY postDate desc');

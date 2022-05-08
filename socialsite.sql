@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2022 at 04:24 AM
+-- Generation Time: May 08, 2022 at 07:07 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -49,7 +49,8 @@ CREATE TABLE `post` (
   `title` varchar(20) NOT NULL,
   `message` varchar(250) DEFAULT NULL,
   `privacySetting` varchar(20) NOT NULL DEFAULT 'public',
-  `postDate` datetime NOT NULL DEFAULT current_timestamp()
+  `postDate` datetime NOT NULL DEFAULT current_timestamp(),
+  `postUpdate` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --

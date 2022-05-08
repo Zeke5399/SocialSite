@@ -1,4 +1,4 @@
-<form class="cancelButton" action="" method="POST">
+<form class="postform" action="" method="POST">
     <input type="hidden" name="action" value="post-remove-action">
     <input type="hidden" name="postid" value="<?php echo $post['postID']; ?>">
     

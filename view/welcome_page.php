@@ -10,9 +10,10 @@
                 foreach ($posts as $post) {
                     $user = accountDB::getUserByID($post['accountID']);
                     echo "<li>";
+                    if ($post['postUpdate'] != null) { echo "(edited)<br>"; }
                     echo "<Strong>Title:</Strong> ", $post['title'], "<br>";
                     echo "<Strong>Message:</Strong> ", $post['message'], "<br>";
-                    echo "<Strong>Date:</Strong> ", $post['postDate'], "<br>";
+                    echo "<Strong>Date:</Strong> ", date("m-d-Y H:i:s", strtotime($post['postDate'])), "<br>";
                     echo "<Strong>By:</Strong> ", $user['username'];
                     echo "</li>";
                 }

@@ -181,6 +181,7 @@ switch ($action) {
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = false;
 
         include("./view/profile.php");
         break;
@@ -189,6 +190,7 @@ switch ($action) {
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = false;
 
         $fname = filter_input(INPUT_POST, 'fname');
         $lname = filter_input(INPUT_POST, 'lname');
@@ -239,6 +241,7 @@ switch ($action) {
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = false;
 
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
@@ -297,6 +300,7 @@ switch ($action) {
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = false;
 
         $title = filter_input(INPUT_POST, 'title');
         $postmessage = filter_input(INPUT_POST, 'postmessage');
@@ -327,11 +331,12 @@ switch ($action) {
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
         include("./view/profile.php");
         break;
-        
+
     case 'post-remove-action':
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = false;
 
         $postID = filter_input(INPUT_POST, 'postid');
 
@@ -340,6 +345,77 @@ switch ($action) {
         $message = "<p id='greenText'>Post Removed!</p>";
         //Refresh the list.
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        include("./view/profile.php");
+        break;
+        
+    case 'post-remove-action':
+        $user = accountDB::getUserByID($_SESSION['accountID']);
+        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = false;
+
+        $postID = filter_input(INPUT_POST, 'postid');
+
+        postDB::removePost($postID);
+
+        $message = "<p id='greenText'>Post Removed!</p>";
+        //Refresh the list.
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        include("./view/profile.php");
+        break;
+    
+    case 'post-updateform-action':
+        $user = accountDB::getUserByID($_SESSION['accountID']);
+        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = true;
+
+        $postID = filter_input(INPUT_POST, 'postid');
+        $selectedPost = postDB::getPostByPostID($postID);
+        
+        $title = $selectedPost['title'];
+        $postmessage = $selectedPost['message'];
+        
+        include("./view/profile.php");
+        break;
+    
+    case 'post-update-action':
+        $user = accountDB::getUserByID($_SESSION['accountID']);
+        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        $postUpdate = true;
+        
+        $postID = filter_input(INPUT_POST, 'postid');
+        $title = filter_input(INPUT_POST, 'title');
+        $postmessage = filter_input(INPUT_POST, 'postmessage');
+        $privacysetting = filter_input(INPUT_POST, 'privacysetting');
+
+        $titleError = "";
+        $postmessageError = "";
+        $privacysettingError = "";
+
+        $validator = new validation();
+        if ($validator->emptyInput($title)) {
+            $titleError = "Please enter a title!";
+            include("./view/profile.php");
+            exit();
+        }
+        if ($validator->emptyInput($privacysetting)) {
+            $privacysettingError = "Please select either public or private!";
+            include("./view/profile.php");
+            exit();
+        }
+
+        $postUpdate = date("Y-m-d h:i:s");
+        postDB::updatePost($postID, $title, $postmessage, $privacysetting, $postUpdate);
+
+        $message = "<p id='greenText'>Post Updated!</p>";
+        //Refresh the list.
+        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
+        
+        $title = "";
+        $postmessage = "";
+        $postUpdate = false;
         include("./view/profile.php");
         break;
 }

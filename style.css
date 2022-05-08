@@ -53,11 +53,12 @@ img {
 }
 
 .postButton {
-    float: left;
     padding: none;
     max-width: 25px;
     border: none;
 }
+
+.postform {display: inline-block;}
 
 ul {
 /*  flex-wrap: wrap;*/
