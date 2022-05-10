@@ -130,6 +130,29 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
+   
+    public static function getPostByPostandAccountID($postID, $accountID) {
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE postID = :postid AND accountID = :accountid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':postid', $postID);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $resultCheck;
+        if($statement->rowCount() > 0) {
+            $resultCheck = true;
+	}
+	else {
+            $resultCheck = false;
+	}
+        $statement->closeCursor();
+	return $resultCheck;
+    }
     
     public static function checkPostsByAccountID($accountID) {
         $db = dbh::getDB();

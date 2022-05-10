@@ -5,15 +5,9 @@
         <group>
             <file>file:/C:/xampp/htdocs/SocialSite/index.php</file>
             <file>file:/C:/xampp/htdocs/SocialSite/view/update_post_button.php</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/style.css</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/view/post_update_form.php</file>
+            <file>file:/C:/xampp/htdocs/SocialSite/model/validation.php</file>
             <file>file:/C:/xampp/htdocs/SocialSite/db/postDB.php</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/view/post_add_form.php</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/view/profile.php</file>
             <file>file:/C:/xampp/htdocs/SocialSite/db/accountDB.php</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/model/account.php</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/model/post.php</file>
-            <file>file:/C:/xampp/htdocs/SocialSite/view/remove_post_button.php</file>
         </group>
     </open-files>
 </project-private>

@@ -347,23 +347,7 @@ switch ($action) {
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
         include("./view/profile.php");
         break;
-        
-    case 'post-remove-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = false;
 
-        $postID = filter_input(INPUT_POST, 'postid');
-
-        postDB::removePost($postID);
-
-        $message = "<p id='greenText'>Post Removed!</p>";
-        //Refresh the list.
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        include("./view/profile.php");
-        break;
-    
     case 'post-updateform-action':
         $user = accountDB::getUserByID($_SESSION['accountID']);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
@@ -406,6 +390,14 @@ switch ($action) {
             exit();
         }
 
+        //Checks to see if you originally made the post.
+        if (!$validator->validPostID($postID, $_SESSION['accountID'])) {
+            $message = "<p id='redText'>Error the post id is not associated with this account!</p>"
+                    . "<p>Please reload your page.</p>";
+            include("./view/profile.php");
+            exit();
+        }
+        
         $postUpdate = date("Y-m-d h:i:s");
         postDB::updatePost($postID, $title, $postmessage, $privacysetting, $postUpdate);
 

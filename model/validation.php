@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of validation
- *
- * @author zekei
- */
 class validation {
     public static function emptyInput($value)
     {
@@ -31,7 +26,7 @@ class validation {
     
     public static function validName($value) {
         $result;
-        if(!preg_match("/^[a-zA-Z-' ]*$/", $value)) {
+        if(!preg_match("/^[a-zA-Z0-9-' ]*$/", $value)) {
             $result = true;
         }
         else {
@@ -113,5 +108,16 @@ class validation {
             $result = false;
         }
         return $result;
+    }
+    
+    public static function validPostID($value, $value2) {
+	$result;
+	if(postDB::getPostByPostandAccountID($value, $value2)) {
+            $result = true;
+	}
+	else {
+            $result = false;
+	}
+	return $result;
     }
 }

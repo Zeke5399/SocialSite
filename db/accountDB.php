@@ -1,9 +1,4 @@
 <?php
-/**
- *
- *
- * @author zekei
- */
 class accountDB {
     public static function loginAccount($username, $password)
     {
