@@ -159,12 +159,13 @@ class accountDB {
         return $row;
     }
 
-    public static function updateDetails($accountID, $fname, $lname) {
+    public static function updateDetails($accountID, $fname, $lname, $bio) {
         $db = dbh::getDB();
-        $query = ('UPDATE account SET fname = :fname, lname = :lname WHERE accountID = :accountid');
+        $query = ('UPDATE account SET fname = :fname, lname = :lname, bio = :bio WHERE accountID = :accountid');
         $statement = $db->prepare($query);
         $statement->bindValue(':fname', $fname);
         $statement->bindValue(':lname', $lname);
+        $statement->bindValue(':bio', $bio);
         $statement->bindValue(':accountid', $accountID);
         try {
             $statement->execute();

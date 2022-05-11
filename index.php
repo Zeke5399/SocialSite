@@ -160,7 +160,7 @@ switch ($action) {
         accountDB::loginAccount($username, $password);
         //Gets data and makes class
         $user = accountDB::getUser($username);
-        $account = new account($user['accountID'], $user['username'], $user['accountType'], $user['email'], $user['fname'], $user['lname']);
+        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname'], $user['bio']);
         //Send to success page if it works
         $message = "<p id='greenText'>You have successfully logged in!</p>
        <p>Welcome, " . $account->getUsername() . "<br>" .
@@ -178,25 +178,22 @@ switch ($action) {
         break;
 
     case 'profile':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = false;
+        require("./required/fetchData-false.php");
 
         include("./view/profile.php");
         break;
 
     case 'account-details-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = false;
+        require("./required/fetchData-false.php");
 
         $fname = filter_input(INPUT_POST, 'fname');
         $lname = filter_input(INPUT_POST, 'lname');
+        $bio = filter_input(INPUT_POST, 'bio');
 
         $firstnameError = "";
         $lastnameError = "";
+        $bioError = "";
+        
         //Validate inputs
         $validator = new validation();
         if ($validator->emptyInput($fname)) {
@@ -219,18 +216,24 @@ switch ($action) {
             include("./view/profile.php");
             exit();
         }
-        if ($validator->validName($fname)) {
+        if ($validator->validNameNoNum($fname)) {
             $fnameError = "Please correct the formatting for your first name!";
             include("./view/profile.php");
             exit();
         }
-        if ($validator->validName($lname)) {
+        if ($validator->validNameNoNum($lname)) {
             $lnameError = "Please correct the formatting for your last name!";
             include("./view/profile.php");
             exit();
         }
 
-        accountDB::updateDetails($_SESSION['accountID'], $fname, $lname);
+        if ($validator->bioLength($bio)) {
+            $bioError = "Length cannot be longer than 100 characters!";
+            include("./view/profile.php");
+            exit();
+        }
+        
+        accountDB::updateDetails($_SESSION['accountID'], $fname, $lname, $bio);
 
         $message = "<p id='greenText'>Account updated successfully!</p>
        <p>" . $fname . " " . $lname . "</p>";
@@ -238,10 +241,7 @@ switch ($action) {
         break;
 
     case 'account-update-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = false;
+        require("./required/fetchData-false.php");
 
         $username = filter_input(INPUT_POST, 'username');
         $password = filter_input(INPUT_POST, 'password');
@@ -297,10 +297,7 @@ switch ($action) {
         break;
 
     case 'post-add-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = false;
+        require("./required/fetchData-false.php");
 
         $title = filter_input(INPUT_POST, 'title');
         $postmessage = filter_input(INPUT_POST, 'postmessage');
@@ -311,12 +308,12 @@ switch ($action) {
         $fileSize = $_FILES['file']['size'];
         $fileError = $_FILES['file']['error'];
         $fileType = $_FILES['file']['type'];
-        
+
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
-        
+
         $allowed = array('jpg', 'jpeg', 'png', 'gif', 'pdf');
-        
+
         $titleError = "";
         $postmessageError = "";
         $privacysettingError = "";
@@ -324,21 +321,35 @@ switch ($action) {
         $validator = new validation();
         if ($validator->emptyInput($title)) {
             $titleError = "Please enter a title!";
+            $fileError = "";
+            include("./view/profile.php");
+            exit();
+        }
+        if ($validator->titleLength($title)) {
+            $titleError = "Title cannot be longer than 30 characters!";
+            $fileError = "";
+            include("./view/profile.php");
+            exit();
+        }
+        if ($validator->messageLength($postmessage)) {
+            $postmessageError = "Message cannot be longer than 30 characters!";
+            $fileError = "";
             include("./view/profile.php");
             exit();
         }
         if ($validator->emptyInput($privacysetting)) {
             $privacysettingError = "Please select either public or private!";
+            $fileError = "";
             include("./view/profile.php");
             exit();
         }
 
         //File Validation
         if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0 ) {
+            if ($fileError === 0) {
                 if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('', true).".".$fileActualExt;
-                    $fileDestination = "uploads/".$fileNameNew;
+                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                    $fileDestination = "uploads/" . $fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
                 } else {
                     $fileError = "File was too big!";
@@ -357,33 +368,33 @@ switch ($action) {
             include("./view/profile.php");
             exit();
         }
-        
-        $fileError = "";
-        
+
 //  Can't make object because postID and postDate have not been set yet.        
 //        $post = new post($postID, $_SESSION['accountID'], $title, $message, $privacysetting, $postDate);
         postDB::addPost($_SESSION['accountID'], $title, $postmessage, $fileDestination, $privacysetting);
 
         $message = "<p id='greenText'>Post Submitted!</p>";
+        
+        $title = "";
+        $postmessage = "";
+        $fileError = "";
+        
         //Refresh the list.
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
         include("./view/profile.php");
         break;
 
     case 'post-remove-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = false;
+        require("./required/fetchData-false.php");
 
         $postID = filter_input(INPUT_POST, 'postid');
         $post = postDB::getPostByPostID($postID);
 
         //Remove image if there was one
-        if($post['imgLocation'] != "") {
+        if ($post['imgLocation'] != "") {
             unlink($post['imgLocation']);
         }
-        
+
         postDB::removePost($postID);
 
         $message = "<p id='greenText'>Post Removed!</p>";
@@ -393,26 +404,20 @@ switch ($action) {
         break;
 
     case 'post-updateform-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = true;
+        require("./required/fetchData-true.php");
 
         $postID = filter_input(INPUT_POST, 'postid');
         $selectedPost = postDB::getPostByPostID($postID);
-        
+
         $title = $selectedPost['title'];
         $postmessage = $selectedPost['message'];
-        
+
         include("./view/profile.php");
         break;
-    
+
     case 'post-update-action':
-        $user = accountDB::getUserByID($_SESSION['accountID']);
-        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname']);
-        $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        $postUpdate = true;
-        
+        require("./required/fetchData-true.php");
+
         $postID = filter_input(INPUT_POST, 'postid');
         $title = filter_input(INPUT_POST, 'title');
         $postmessage = filter_input(INPUT_POST, 'postmessage');
@@ -423,12 +428,12 @@ switch ($action) {
         $fileSize = $_FILES['file']['size'];
         $fileError = $_FILES['file']['error'];
         $fileType = $_FILES['file']['type'];
-        
+
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
-        
+
         $allowed = array('jpg', 'jpeg', 'png', 'gif', 'pdf');
-        
+
         $titleError = "";
         $postmessageError = "";
         $privacysettingError = "";
@@ -436,27 +441,41 @@ switch ($action) {
         $validator = new validation();
         if ($validator->emptyInput($title)) {
             $titleError = "Please enter a title!";
+            $fileError = "";
+            include("./view/profile.php");
+            exit();
+        }
+        if ($validator->titleLength($title)) {
+            $titleError = "Title cannot be longer than 30 characters!";
+            $fileError = "";
+            include("./view/profile.php");
+            exit();
+        }
+        if ($validator->messageLength($postmessage)) {
+            $postmessageError = "Message cannot be longer than 30 characters!";
+            $fileError = "";
             include("./view/profile.php");
             exit();
         }
         if ($validator->emptyInput($privacysetting)) {
             $privacysettingError = "Please select either public or private!";
+            $fileError = "";
             include("./view/profile.php");
             exit();
         }
 
         //File Validation
         if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0 ) {
+            if ($fileError === 0) {
                 if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('', true).".".$fileActualExt;
-                    $fileDestination = "uploads/".$fileNameNew;
+                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
+                    $fileDestination = "uploads/" . $fileNameNew;
                     move_uploaded_file($fileTmpName, $fileDestination);
-                    
+
                     $post = postDB::getPostByPostID($postID);
 
                     //Remove image if there was one
-                    if($post['imgLocation'] != "") {
+                    if ($post['imgLocation'] != "") {
                         unlink($post['imgLocation']);
                     }
                 } else {
@@ -476,7 +495,7 @@ switch ($action) {
             include("./view/profile.php");
             exit();
         }
-        
+
         //Checks to see if you originally made the post.
         if (!$validator->validPostID($postID, $_SESSION['accountID'])) {
             $message = "<p id='redText'>Error the post id is not associated with this account!</p>"
@@ -484,16 +503,17 @@ switch ($action) {
             include("./view/profile.php");
             exit();
         }
-        
+
         $postUpdate = date("Y-m-d h:i:s");
         postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdate);
 
         $message = "<p id='greenText'>Post Updated!</p>";
         //Refresh the list.
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
-        
+
         $title = "";
         $postmessage = "";
+        $fileError = "";
         $postUpdate = false;
         include("./view/profile.php");
         break;

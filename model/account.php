@@ -11,14 +11,16 @@ class account {
     private $accountType;
     private $fname;
     private $lname;
+    private $bio;
 
-    public function __construct($accountID, $username, $email, $accountType, $fname, $lname) {
+    public function __construct($accountID, $username, $email, $accountType, $fname, $lname, $bio) {
         $this->accountID = $accountID;
         $this->username = $username;
         $this->email = $email;
         $this->accountType = $accountType;
         $this->fname = $fname;
         $this->lname = $lname;
+        $this->bio = $bio;
     }
 
     public function getAccountID() {
@@ -45,6 +47,10 @@ class account {
         return $this->lname;
     }
 
+    public function getBio() {
+        return $this->bio;
+    }
+
     public function setAccountID($accountID): void {
         $this->accountID = $accountID;
     }
@@ -68,4 +74,9 @@ class account {
     public function setLname($lname): void {
         $this->lname = $lname;
     }
+
+    public function setBio($bio): void {
+        $this->bio = $bio;
+    }
+
 }

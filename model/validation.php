@@ -35,6 +35,17 @@ class validation {
         return $result;
     }
     
+    public static function validNameNoNum($value) {
+        $result;
+        if(!preg_match("/^[a-zA-Z-' ]*$/", $value)) {
+            $result = true;
+        }
+        else {
+            $result = false;
+        }
+        return $result;
+    }
+    
     public static function usernameTaken($value) {
 	$result;
 	if(accountDB::checkUsername($value)) {
@@ -79,6 +90,39 @@ class validation {
 //	elseif(strlen($value) < 4) {
 //            $result = true;
 //	}
+	else {
+            $result = false;
+	}
+	return $result;
+    }
+
+    public static function titleLength($value) {
+        $result;
+	if(strlen($value) > 30) {
+            $result = true;
+	}
+	else {
+            $result = false;
+	}
+	return $result;
+    }
+    
+    public static function messageLength($value) {
+        $result;
+	if(strlen($value) > 40) {
+            $result = true;
+	}
+	else {
+            $result = false;
+	}
+	return $result;
+    }
+    
+    public static function bioLength($value) {
+        $result;
+	if(strlen($value) > 100) {
+            $result = true;
+	}
 	else {
             $result = false;
 	}

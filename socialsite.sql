@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 11, 2022 at 07:06 AM
+-- Generation Time: May 11, 2022 at 10:26 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -31,12 +31,13 @@ USE `socialsite`;
 
 CREATE TABLE `account` (
   `accountID` int(10) NOT NULL,
-  `username` varchar(50) NOT NULL,
+  `username` varchar(25) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `accountType` varchar(20) NOT NULL DEFAULT 'user',
   `fname` varchar(20) DEFAULT NULL,
-  `lname` varchar(20) DEFAULT NULL
+  `lname` varchar(20) DEFAULT NULL,
+  `bio` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -47,7 +48,7 @@ CREATE TABLE `post` (
   `postID` int(10) NOT NULL,
   `accountID` int(10) NOT NULL,
   `title` varchar(30) NOT NULL,
-  `message` varchar(250) DEFAULT NULL,
+  `message` varchar(40) DEFAULT NULL,
   `imgLocation` varchar(250) DEFAULT NULL,
   `privacySetting` varchar(20) NOT NULL DEFAULT 'public',
   `postDate` datetime NOT NULL DEFAULT current_timestamp(),

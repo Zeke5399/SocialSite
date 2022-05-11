@@ -4,14 +4,16 @@ class post {
     private $accountID;
     private $title;
     private $message;
+    private $imgLocation;
     private $privacySetting;
     private $postDate;
     
-    public function __construct($postID, $accountID, $title, $message, $privacySetting, $postDate) {
+    public function __construct($postID, $accountID, $title, $message, $imgLocation, $privacySetting, $postDate) {
         $this->postID = $postID;
         $this->accountID = $accountID;
         $this->title = $title;
         $this->message = $message;
+        $this->imgLocation = $imgLocation;
         $this->privacySetting = $privacySetting;
         $this->postDate = $postDate;
     }
@@ -30,6 +32,10 @@ class post {
 
     public function getMessage() {
         return $this->message;
+    }
+
+    public function getImgLocation() {
+        return $this->imgLocation;
     }
 
     public function getPrivacySetting() {
@@ -56,6 +62,10 @@ class post {
         $this->message = $message;
     }
 
+    public function setImgLocation($imgLocation): void {
+        $this->imgLocation = $imgLocation;
+    }
+
     public function setPrivacySetting($privacySetting): void {
         $this->privacySetting = $privacySetting;
     }
@@ -63,4 +73,5 @@ class post {
     public function setPostDate($postDate): void {
         $this->postDate = $postDate;
     }
+
 }
