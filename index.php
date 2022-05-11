@@ -49,52 +49,7 @@ switch ($action) {
 
         if ($stage == 0) {
             //Validate inputs
-            $validator = new validation();
-            if ($validator->emptyInput($username)) {
-                $usernameError = "Username is empty!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->emptyInput($email)) {
-                $emailError = "E-mail is empty!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->emptyInput($password)) {
-                $passwordError = "Password is empty!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->validName($username)) {
-                $usernameError = "Please correct the formatting for your username!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->usernameLength($username)) {
-                $usernameError = "Your username must be between 4-15 characters!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->validEmail($email)) {
-                $emailError = "E-Mail is invalid!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->passwordLength($password)) {
-                $passwordError = "Your password must be between 10-20 characters!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->usernameTaken($username)) {
-                $usernameError = "Username taken!";
-                include("./view/register.php");
-                exit();
-            }
-            if ($validator->emailTaken($email)) {
-                $emailError = "E-Mail taken!";
-                include("./view/register.php");
-                exit();
-            }
+            require("./required/registerValidate.php");
 
             //Generate Vkey
             $vkey = md5(time() . $username);
@@ -143,18 +98,9 @@ switch ($action) {
 
         $usernameError = "";
         $passwordError = "";
+
         //Validate inputs
-        $validator = new validation();
-        if ($validator->emptyInput($username)) {
-            $usernameError = "Username is empty!";
-            include("./view/login.php");
-            exit();
-        }
-        if ($validator->emptyInput($password)) {
-            $passwordError = "Password is empty!";
-            include("./view/login.php");
-            exit();
-        }
+        require("./required/loginValidate.php");
 
         //Call a login method
         accountDB::loginAccount($username, $password);
@@ -193,46 +139,10 @@ switch ($action) {
         $firstnameError = "";
         $lastnameError = "";
         $bioError = "";
-        
-        //Validate inputs
-        $validator = new validation();
-        if ($validator->emptyInput($fname)) {
-            $fnameError = "First name is empty!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->emptyInput($lname)) {
-            $lnameError = "Last name is empty!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->nameLength($fname)) {
-            $fnameError = "First name can not be longer than 25 characters!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->nameLength($lname)) {
-            $lnameError = "Last name can not be longer than 25 characters!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->validNameNoNum($fname)) {
-            $fnameError = "Please correct the formatting for your first name!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->validNameNoNum($lname)) {
-            $lnameError = "Please correct the formatting for your last name!";
-            include("./view/profile.php");
-            exit();
-        }
 
-        if ($validator->bioLength($bio)) {
-            $bioError = "Length cannot be longer than 100 characters!";
-            include("./view/profile.php");
-            exit();
-        }
-        
+        //Validate inputs
+        require("./required/accountdetailsValidate.php");
+
         accountDB::updateDetails($_SESSION['accountID'], $fname, $lname, $bio);
 
         $message = "<p id='greenText'>Account updated successfully!</p>
@@ -248,38 +158,9 @@ switch ($action) {
 
         $usernameError = "";
         $passwordError = "";
+
         //Validate inputs
-        $validator = new validation();
-        if ($validator->emptyInput($username)) {
-            $usernameError = "Username is empty!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->emptyInput($password)) {
-            $passwordError = "Password is empty!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->validName($username)) {
-            $usernameError = "Please correct the formatting for your username!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->usernameLength($username)) {
-            $usernameError = "Your username must be between 4-15 characters!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->passwordLength($password)) {
-            $passwordError = "Your password must be between 10-20 characters!";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->usernameTaken($username)) {
-            $usernameError = "Username taken!";
-            include("./view/profile.php");
-            exit();
-        }
+        require("./required/accountupdateValidate.php");
 
         accountDB::updateUser($_SESSION['accountID'], $username, $password);
 
@@ -318,67 +199,18 @@ switch ($action) {
         $postmessageError = "";
         $privacysettingError = "";
 
-        $validator = new validation();
-        if ($validator->emptyInput($title)) {
-            $titleError = "Please enter a title!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->titleLength($title)) {
-            $titleError = "Title cannot be longer than 30 characters!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->messageLength($postmessage)) {
-            $postmessageError = "Message cannot be longer than 30 characters!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->emptyInput($privacysetting)) {
-            $privacysettingError = "Please select either public or private!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-
-        //File Validation
-        if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0) {
-                if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = "uploads/" . $fileNameNew;
-                    move_uploaded_file($fileTmpName, $fileDestination);
-                } else {
-                    $fileError = "File was too big!";
-                    include("./view/profile.php");
-                    exit();
-                }
-            } else {
-                $fileError = "There was an error uploading the file!";
-                include("./view/profile.php");
-                exit();
-            }
-        } elseif ($fileActualExt == "") {
-            $fileDestination = null;
-        } else {
-            $fileError = "You can't upload files of this type!";
-            include("./view/profile.php");
-            exit();
-        }
+        require("./required/postaddValidate.php");
 
 //  Can't make object because postID and postDate have not been set yet.        
 //        $post = new post($postID, $_SESSION['accountID'], $title, $message, $privacysetting, $postDate);
         postDB::addPost($_SESSION['accountID'], $title, $postmessage, $fileDestination, $privacysetting);
 
         $message = "<p id='greenText'>Post Submitted!</p>";
-        
+
         $title = "";
         $postmessage = "";
         $fileError = "";
-        
+
         //Refresh the list.
         $posts = postDB::getPostsByAccountID($_SESSION['accountID']);
         include("./view/profile.php");
@@ -438,71 +270,7 @@ switch ($action) {
         $postmessageError = "";
         $privacysettingError = "";
 
-        $validator = new validation();
-        if ($validator->emptyInput($title)) {
-            $titleError = "Please enter a title!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->titleLength($title)) {
-            $titleError = "Title cannot be longer than 30 characters!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->messageLength($postmessage)) {
-            $postmessageError = "Message cannot be longer than 30 characters!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-        if ($validator->emptyInput($privacysetting)) {
-            $privacysettingError = "Please select either public or private!";
-            $fileError = "";
-            include("./view/profile.php");
-            exit();
-        }
-
-        //File Validation
-        if (in_array($fileActualExt, $allowed)) {
-            if ($fileError === 0) {
-                if ($fileSize < 1000000) {
-                    $fileNameNew = uniqid('', true) . "." . $fileActualExt;
-                    $fileDestination = "uploads/" . $fileNameNew;
-                    move_uploaded_file($fileTmpName, $fileDestination);
-
-                    $post = postDB::getPostByPostID($postID);
-
-                    //Remove image if there was one
-                    if ($post['imgLocation'] != "") {
-                        unlink($post['imgLocation']);
-                    }
-                } else {
-                    $fileError = "File was too big!";
-                    include("./view/profile.php");
-                    exit();
-                }
-            } else {
-                $fileError = "There was an error uploading the file!";
-                include("./view/profile.php");
-                exit();
-            }
-        } elseif ($fileActualExt == "") {
-            $fileDestination = null;
-        } else {
-            $fileError = "You can't upload files of this type!";
-            include("./view/profile.php");
-            exit();
-        }
-
-        //Checks to see if you originally made the post.
-        if (!$validator->validPostID($postID, $_SESSION['accountID'])) {
-            $message = "<p id='redText'>Error the post id is not associated with this account!</p>"
-                    . "<p>Please reload your page.</p>";
-            include("./view/profile.php");
-            exit();
-        }
+        require("./required/postupdateValidate.php");
 
         $postUpdate = date("Y-m-d h:i:s");
         postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdate);

@@ -53,7 +53,7 @@ img {
 }
 
 .postButton {
-    padding: none;
+    padding: 0px;
     max-width: 25px;
     border: none;
 }
@@ -103,4 +103,18 @@ a:visited {
 a:hover {
     color: #77797A;
     border-bottom: 1px solid;
+}
+
+/* Tablet layout */
+@media only screen and (max-width: 1024px) {
+
+}
+
+/* Phone layout */
+@media only all and (max-width: 768px) {
+
+    #right {
+        float: none;
+    }
+    
 }
