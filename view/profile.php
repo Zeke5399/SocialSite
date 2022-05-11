@@ -27,9 +27,10 @@
                 echo "<li>";
                 if ($post['postUpdate'] != null) { echo "(edited)<br>"; }
                 echo "<Strong>Title:</Strong> ", $post['title'], "<br>";
-                echo "<Strong>Message:</Strong> ", $post['message'], "<br>";
+                if($post['message'] != "") { echo "<Strong>Message:</Strong> ", $post['message'], "<br>"; }
                 echo "<Strong>Date:</Strong> ", date("m-d-Y H:i:s", strtotime($post['postDate'])), "<br>";
                 echo "<Strong>Privacy:</Strong> ", $post['privacySetting'];
+                if($post['imgLocation'] != "") { echo "<img class='' src='". $post['imgLocation'] ."' alt='post image.'>"; }
                 include './view/update_post_button.php';
                 include './view/remove_post_button.php';
                 echo "</li>";

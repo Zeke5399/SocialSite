@@ -306,6 +306,17 @@ switch ($action) {
         $postmessage = filter_input(INPUT_POST, 'postmessage');
         $privacysetting = filter_input(INPUT_POST, 'privacysetting');
 
+        $fileName = $_FILES['file']['name'];
+        $fileTmpName = $_FILES['file']['tmp_name'];
+        $fileSize = $_FILES['file']['size'];
+        $fileError = $_FILES['file']['error'];
+        $fileType = $_FILES['file']['type'];
+        
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+        
+        $allowed = array('jpg', 'jpeg', 'png', 'gif', 'pdf');
+        
         $titleError = "";
         $postmessageError = "";
         $privacysettingError = "";
@@ -322,9 +333,36 @@ switch ($action) {
             exit();
         }
 
+        //File Validation
+        if (in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0 ) {
+                if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('', true).".".$fileActualExt;
+                    $fileDestination = "uploads/".$fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                } else {
+                    $fileError = "File was too big!";
+                    include("./view/profile.php");
+                    exit();
+                }
+            } else {
+                $fileError = "There was an error uploading the file!";
+                include("./view/profile.php");
+                exit();
+            }
+        } elseif ($fileActualExt == "") {
+            $fileDestination = null;
+        } else {
+            $fileError = "You can't upload files of this type!";
+            include("./view/profile.php");
+            exit();
+        }
+        
+        $fileError = "";
+        
 //  Can't make object because postID and postDate have not been set yet.        
 //        $post = new post($postID, $_SESSION['accountID'], $title, $message, $privacysetting, $postDate);
-        postDB::addPost($_SESSION['accountID'], $title, $postmessage, $privacysetting);
+        postDB::addPost($_SESSION['accountID'], $title, $postmessage, $fileDestination, $privacysetting);
 
         $message = "<p id='greenText'>Post Submitted!</p>";
         //Refresh the list.
@@ -339,7 +377,13 @@ switch ($action) {
         $postUpdate = false;
 
         $postID = filter_input(INPUT_POST, 'postid');
+        $post = postDB::getPostByPostID($postID);
 
+        //Remove image if there was one
+        if($post['imgLocation'] != "") {
+            unlink($post['imgLocation']);
+        }
+        
         postDB::removePost($postID);
 
         $message = "<p id='greenText'>Post Removed!</p>";
@@ -374,6 +418,17 @@ switch ($action) {
         $postmessage = filter_input(INPUT_POST, 'postmessage');
         $privacysetting = filter_input(INPUT_POST, 'privacysetting');
 
+        $fileName = $_FILES['file']['name'];
+        $fileTmpName = $_FILES['file']['tmp_name'];
+        $fileSize = $_FILES['file']['size'];
+        $fileError = $_FILES['file']['error'];
+        $fileType = $_FILES['file']['type'];
+        
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+        
+        $allowed = array('jpg', 'jpeg', 'png', 'gif', 'pdf');
+        
         $titleError = "";
         $postmessageError = "";
         $privacysettingError = "";
@@ -390,6 +445,38 @@ switch ($action) {
             exit();
         }
 
+        //File Validation
+        if (in_array($fileActualExt, $allowed)) {
+            if ($fileError === 0 ) {
+                if ($fileSize < 1000000) {
+                    $fileNameNew = uniqid('', true).".".$fileActualExt;
+                    $fileDestination = "uploads/".$fileNameNew;
+                    move_uploaded_file($fileTmpName, $fileDestination);
+                    
+                    $post = postDB::getPostByPostID($postID);
+
+                    //Remove image if there was one
+                    if($post['imgLocation'] != "") {
+                        unlink($post['imgLocation']);
+                    }
+                } else {
+                    $fileError = "File was too big!";
+                    include("./view/profile.php");
+                    exit();
+                }
+            } else {
+                $fileError = "There was an error uploading the file!";
+                include("./view/profile.php");
+                exit();
+            }
+        } elseif ($fileActualExt == "") {
+            $fileDestination = null;
+        } else {
+            $fileError = "You can't upload files of this type!";
+            include("./view/profile.php");
+            exit();
+        }
+        
         //Checks to see if you originally made the post.
         if (!$validator->validPostID($postID, $_SESSION['accountID'])) {
             $message = "<p id='redText'>Error the post id is not associated with this account!</p>"
@@ -399,7 +486,7 @@ switch ($action) {
         }
         
         $postUpdate = date("Y-m-d h:i:s");
-        postDB::updatePost($postID, $title, $postmessage, $privacysetting, $postUpdate);
+        postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdate);
 
         $message = "<p id='greenText'>Post Updated!</p>";
         //Refresh the list.

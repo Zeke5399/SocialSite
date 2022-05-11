@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2022 at 07:07 PM
+-- Generation Time: May 11, 2022 at 07:06 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -46,8 +46,9 @@ CREATE TABLE `account` (
 CREATE TABLE `post` (
   `postID` int(10) NOT NULL,
   `accountID` int(10) NOT NULL,
-  `title` varchar(20) NOT NULL,
+  `title` varchar(30) NOT NULL,
   `message` varchar(250) DEFAULT NULL,
+  `imgLocation` varchar(250) DEFAULT NULL,
   `privacySetting` varchar(20) NOT NULL DEFAULT 'public',
   `postDate` datetime NOT NULL DEFAULT current_timestamp(),
   `postUpdate` datetime DEFAULT NULL

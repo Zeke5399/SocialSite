@@ -2,13 +2,14 @@
 
 class postDB {
 
-    public static function addPost($accountID, $title, $message, $privacysetting) {
+    public static function addPost($accountID, $title, $message, $imgLocation, $privacysetting) {
         $db = dbh::getDB();
-        $query = ('INSERT INTO post (accountID, title, message, privacySetting) VALUES (:accountID, :title, :message, :privacySetting)');
+        $query = ('INSERT INTO post (accountID, title, message, imgLocation, privacySetting) VALUES (:accountID, :title, :message, :imglocation, :privacySetting)');
         $statement = $db->prepare($query);
         $statement->bindValue(':accountID', $accountID);
         $statement->bindValue(':title', $title);
         $statement->bindValue(':message', $message);
+        $statement->bindValue(':imglocation', $imgLocation);
         $statement->bindValue(':privacySetting', $privacysetting);
         try {
             $statement->execute();
@@ -33,12 +34,13 @@ class postDB {
         $statement->closeCursor();
     }
     
-    public static function updatePost($postID, $title, $message, $privacysetting, $postUpdate) {
+    public static function updatePost($postID, $title, $message, $imgLocation, $privacysetting, $postUpdate) {
         $db = dbh::getDB();
-        $query = ('UPDATE post SET title = :title, message = :message, privacySetting = :privacySetting, postUpdate = :postupdate WHERE postID = :postid');
+        $query = ('UPDATE post SET title = :title, message = :message, imgLocation = :imglocation, privacySetting = :privacySetting, postUpdate = :postupdate WHERE postID = :postid');
         $statement = $db->prepare($query);
         $statement->bindValue(':title', $title);
         $statement->bindValue(':message', $message);
+        $statement->bindValue(':imglocation', $imgLocation);
         $statement->bindValue(':privacySetting', $privacysetting);
         $statement->bindValue(':postupdate', $postUpdate);
         $statement->bindValue(':postid', $postID);
