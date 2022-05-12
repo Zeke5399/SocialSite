@@ -73,7 +73,7 @@ ul {
     /*  flex-wrap: wrap;*/
     flex-direction: column;
     display: flex;
-    height: 500px;
+    height: 50vh;
     overflow-y: scroll;
     margin: 0px;
 }
@@ -126,6 +126,10 @@ a:hover {
         font-size: 1.5em;
     }
 
+    header {
+        font-size: 1.5em;
+    }
+
     .postButton {
         max-width: 25px;
     }
@@ -140,7 +144,25 @@ a:hover {
         box-shadow: none;
     }
 
-    /*Footer needs to be bigger!*/
+    footer {
+        height: 50px;
+        font-size: 15px;
+    }
+
+    ul {
+        /*  flex-wrap: wrap;*/
+/*        flex-direction: column;
+        display: flex;*/
+        height: auto;
+/*        overflow-y: scroll;
+        margin: 0px;*/
+    }
+
+/*    li {
+        flex: 1 0 25%;
+        text-align: left;
+        list-style-type: none;
+    }*/
 
     #copy{ font-size: 10px;}
 
