@@ -66,14 +66,14 @@ input[type=text], input[type=password], input[type=email] {
 
 textarea {
     resize: none;
-    width: 95%;
+    width: 80%;
 }
 
 ul {
     /*  flex-wrap: wrap;*/
     flex-direction: column;
     display: flex;
-    height: 50vh;
+    height: 500px;
     overflow-y: scroll;
     margin: 0px;
 }
@@ -111,7 +111,7 @@ a:hover {
 }
 
 /* Tablet layout */
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1300px) {
 
     #wrapper {
         width: 80%;
@@ -120,20 +120,32 @@ a:hover {
 }
 
 /* Phone layout */
-@media only all and (max-width: 768px) {
+@media only all and (max-width: 1000px) {
+
+    h1, h2, h3, p, nav, label, input, button {
+        font-size: 1.5em;
+    }
+
+    .postButton {
+        max-width: 25px;
+    }
 
     body {
         margin: 0px;
     }
-    
+
     #wrapper {
         border: none;
         width: 100%;
         box-shadow: none;
     }
 
+    /*Footer needs to be bigger!*/
+
+    #copy{ font-size: 10px;}
+
     #customHeight {height: auto;}
-    
+
     #left{text-align: center; padding-left: 1px;}
     #leftAlign{text-align: center;}
 
