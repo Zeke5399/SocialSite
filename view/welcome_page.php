@@ -14,8 +14,11 @@
                     echo "<Strong>Title:</Strong> ", $post['title'], "<br>";
                     if($post['message'] != "") { echo "<Strong>Message:</Strong> ", $post['message'], "<br>"; }
                     echo "<Strong>Date:</Strong> ", date("m-d-Y H:i:s", strtotime($post['postDate'])), "<br>";
-                    echo "<Strong>By:</Strong> ", $user['username'];
-                    if($post['imgLocation'] != "") { echo "<img class='' src='". $post['imgLocation'] ."' alt='post image.'>"; }
+                    echo "<Strong>By:</Strong> ", $user['username'], "<br>";
+                    if($post['imgLocation'] != "") { 
+                        echo "<a href='./download.php?path=". $post['imgLocation'] ."'>Download File</a>";
+                        echo "<img class='' src='". $post['imgLocation'] ."' alt='post image.'>"; 
+                    }
                     echo "</li>";
                 }
             }

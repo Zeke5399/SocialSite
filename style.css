@@ -46,10 +46,10 @@ p {
 img {
     display: block;
     margin: 5px;
-    margin-left: auto;
-    margin-right: auto;
     width: 95%;
-    max-width: 950px;
+    max-width: 350px;
+    /*    margin-left: auto;
+        margin-right: auto;*/
 }
 
 .postButton {
@@ -60,8 +60,13 @@ img {
 
 .postform {display: inline-block;}
 
+input[type=text], input[type=password], input[type=email] {
+    width: 50%;
+}
+
 textarea {
     resize: none;
+    width: 95%;
 }
 
 ul {
@@ -106,15 +111,33 @@ a:hover {
 }
 
 /* Tablet layout */
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1200px) {
+
+    #wrapper {
+        width: 80%;
+    }
 
 }
 
 /* Phone layout */
 @media only all and (max-width: 768px) {
 
-    #right {
-        float: none;
+    body {
+        margin: 0px;
     }
     
+    #wrapper {
+        border: none;
+        width: 100%;
+        box-shadow: none;
+    }
+
+    #customHeight {height: auto;}
+    
+    #left{text-align: center; padding-left: 1px;}
+    #leftAlign{text-align: center;}
+
+    #right {float: none; width: 100%;}
+    #left {margin-right: auto;}
+
 }

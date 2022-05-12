@@ -272,8 +272,8 @@ switch ($action) {
 
         require("./required/postupdateValidate.php");
 
-        $postUpdate = date("Y-m-d h:i:s");
-        postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdate);
+        $postUpdateDate = date("Y-m-d h:i:s");
+        postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdateDate);
 
         $message = "<p id='greenText'>Post Updated!</p>";
         //Refresh the list.
