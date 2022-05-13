@@ -15,7 +15,7 @@
         
         <fieldset>
         <h3>Your Posts</h3>
-            <ul>
+            <ul id="postBox">
             <?php
             if(isset($posts)) {
                 if(!postDB::checkPostsByAccountID($_SESSION['accountID']))
