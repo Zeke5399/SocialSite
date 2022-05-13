@@ -31,7 +31,7 @@
                 if($post['message'] != "") { echo "<Strong>Message:</Strong> ", $post['message'], "<br>"; }
                 echo "<Strong>Date:</Strong> ", date("m-d-Y H:i:s", strtotime($post['postDate'])), "<br>";
                 echo "<Strong>Privacy:</Strong> ", $post['privacySetting'];
-                if($post['imgLocation'] != "") { echo "<img class='' src='". $post['imgLocation'] ."' alt='post image.'>"; }
+                if($post['imgLocation'] != "") { echo "<img class='' src='". $post['imgLocation'] ."' alt='post file.'>"; }
                 include './view/update_post_button.php';
                 include './view/remove_post_button.php';
                 echo "</li>";

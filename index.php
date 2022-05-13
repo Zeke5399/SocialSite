@@ -255,6 +255,8 @@ switch ($action) {
         $postmessage = filter_input(INPUT_POST, 'postmessage');
         $privacysetting = filter_input(INPUT_POST, 'privacysetting');
 
+        $post = postDB::getPostByPostID($postID);
+        
         $fileName = $_FILES['file']['name'];
         $fileTmpName = $_FILES['file']['tmp_name'];
         $fileSize = $_FILES['file']['size'];
@@ -272,6 +274,11 @@ switch ($action) {
 
         require("./required/postupdateValidate.php");
 
+        //Remove image if there was one
+        if ($post['imgLocation'] != "") {
+            unlink($post['imgLocation']);
+        }
+        
         $postUpdateDate = date("Y-m-d h:i:s");
         postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdateDate);
 
@@ -284,6 +291,15 @@ switch ($action) {
         $fileError = "";
         $postUpdate = false;
         include("./view/profile.php");
+        break;
+    
+    case 'profileView':
+        $username = filter_input(INPUT_GET, 'username');
+        $user = accountDB::getUser($username);
+        $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname'], $user['bio']);
+        $posts = postDB::getPublicPostsByAccountID($user['accountID']);
+        
+        include("./view/profileView.php");
         break;
 }
 ?>

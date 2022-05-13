@@ -35,11 +35,6 @@ if (in_array($fileActualExt, $allowed)) {
             move_uploaded_file($fileTmpName, $fileDestination);
 
             $post = postDB::getPostByPostID($postID);
-
-            //Remove image if there was one
-            if ($post['imgLocation'] != "") {
-                unlink($post['imgLocation']);
-            }
         } else {
             $fileError = "File was too big!";
             include("./view/profile.php");

@@ -158,7 +158,7 @@ class accountDB {
         $statement->closeCursor();
         return $row;
     }
-
+    
     public static function updateDetails($accountID, $fname, $lname, $bio) {
         $db = dbh::getDB();
         $query = ('UPDATE account SET fname = :fname, lname = :lname, bio = :bio WHERE accountID = :accountid');

@@ -116,7 +116,25 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-
+    
+    public static function getPublicPostsByAccountID($accountID) {
+        $privacySetting = "public";
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE accountID = :accountid AND privacySetting = :privacySetting ORDER BY postDate desc');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':accountid', $accountID);
+        $statement->bindValue(':privacySetting', $privacySetting);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $statement->closeCursor();
+        return $row;
+    }
+    
     public static function getPostByPostID($postID) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE postID = :postid');
