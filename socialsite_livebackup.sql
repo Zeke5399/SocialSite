@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 12, 2022 at 08:08 PM
+-- Generation Time: May 13, 2022 at 11:44 PM
 -- Server version: 10.3.31-MariaDB-0+deb10u1
 -- PHP Version: 7.3.31-1~deb10u1
 
@@ -76,11 +76,12 @@ INSERT INTO `post` (`postID`, `accountID`, `title`, `message`, `imgLocation`, `p
 (7, 4, 'Google:', 'Sex gifs', NULL, 'public', '2022-05-11 15:28:19', NULL),
 (8, 4, 'Help', 'How do you delete a message!!?!?!?', NULL, 'public', '2022-05-11 15:28:44', NULL),
 (9, 4, 'Beans', '', 'uploads/627c1db0d25c66.55831889.jpg', 'public', '2022-05-11 15:33:52', NULL),
-(10, 1, 'Creeper', '', 'uploads/627c1f7bc13e74.01262958.jpg', 'public', '2022-05-11 15:34:33', '2022-05-11 03:41:31'),
+(10, 1, 'Creeper', '', 'uploads/627f230223b602.02326410.jpg', 'public', '2022-05-11 15:34:33', '2022-05-13 10:33:22'),
 (11, 1, 'Test', '', './uploads/627c2d3fca2b65.86712080.png', 'public', '2022-05-11 16:40:15', NULL),
 (12, 4, 'Queer', '', './uploads/627c2d8818b854.05506861.jpeg', 'public', '2022-05-11 16:41:28', NULL),
 (13, 4, 'No buttcheeks', '', './uploads/627c40917b132.10459253.jpeg', 'public', '2022-05-11 18:02:41', NULL),
-(14, 4, 'Important ', 'Beaner balls', NULL, 'public', '2022-05-11 18:34:34', NULL);
+(14, 4, 'Important ', 'Beaner balls', NULL, 'public', '2022-05-11 18:34:34', NULL),
+(15, 1, 'Goal - Polish current features', 'Before adding more', NULL, 'public', '2022-05-13 22:32:23', NULL);
 
 --
 -- Indexes for dumped tables
@@ -111,7 +112,7 @@ ALTER TABLE `account`
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `postID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `postID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
