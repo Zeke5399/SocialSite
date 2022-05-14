@@ -49,12 +49,12 @@
         <h3>Update Account Details</h3>
         <input type="hidden" name="action" value="account-details-action">
         
-        <span id="redText">*</span><label for="fname">First Name</label>
+        <label for="fname">First Name</label>
         <input id="fname" name="fname" type="text" value="<?php if(isset($fname)) { echo $fname;} elseif($account->getFname() != "") { echo $account->getFname();} ?>">
         <span id='redText'><?php if(isset($fnameError)) { echo $fnameError;} ?></span>
         <br><br>
 
-        <span id="redText">*</span><label for="lname">Last Name</label>
+        <label for="lname">Last Name</label>
         <input id="lname" name="lname" type="text" value="<?php if(isset($lname)) { echo $lname;} elseif($account->getLname() != "") { echo $account->getLname();} ?>">
         <span id='redText'><?php if(isset($lnameError)) { echo $lnameError;} ?></span>
         <br><br>
@@ -75,7 +75,7 @@
         <h3>Update Account</h3>
         <input type="hidden" name="action" value="account-update-action">
         
-        <span id="redText">*</span><label for="username">Username</label>
+        <label for="username">Username</label>
         <input id="username" name="username" type="text" value="<?php if(isset($username)) { echo $username;} else { echo $account->getUsername();} ?>">
         <span id='redText'><?php if(isset($usernameError)) { echo $usernameError;} ?></span>
         <br><br>
@@ -95,7 +95,7 @@
         <fieldset>
         <h3>Delete Account</h3>
         <input type="hidden" name="action" value="account-delete-action">
-        
+        <?php if(isset($deleteConfirm)) {echo "<input type='hidden' name='delconfirm' value='1'> <span id='redText'>". $deleteConfirm. "</span>";} ?>
         <button id="submitButton" name="deleteSubmit" type="submit">Submit</button>
         </fieldset>
         <br>

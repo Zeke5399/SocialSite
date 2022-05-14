@@ -34,6 +34,20 @@ class postDB {
         $statement->closeCursor();
     }
     
+    public static function removeAllPostsByAccountID($accountID) {
+        $db = dbh::getDB();
+        $query = ('DELETE FROM post WHERE accountID = :accountid');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':accountid', $accountID);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $statement->closeCursor();
+    }
+    
     public static function updatePost($postID, $title, $message, $imgLocation, $privacysetting, $postUpdate) {
         $db = dbh::getDB();
         $query = ('UPDATE post SET title = :title, message = :message, imgLocation = :imglocation, privacySetting = :privacySetting, postUpdate = :postupdate WHERE postID = :postid');

@@ -1,16 +1,6 @@
 <?php
 
 $validator = new validation();
-if ($validator->emptyInput($fname)) {
-    $fnameError = "First name is empty!";
-    include("./view/profile.php");
-    exit();
-}
-if ($validator->emptyInput($lname)) {
-    $lnameError = "Last name is empty!";
-    include("./view/profile.php");
-    exit();
-}
 if ($validator->nameLength($fname)) {
     $fnameError = "First name can not be longer than 25 characters!";
     include("./view/profile.php");

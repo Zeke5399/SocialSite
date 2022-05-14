@@ -162,7 +162,11 @@ switch ($action) {
         //Validate inputs
         require("./required/accountupdateValidate.php");
 
-        accountDB::updateUser($_SESSION['accountID'], $username, $password);
+        if ($username == "") {
+            accountDB::updateUser($_SESSION['accountID'], $account->getUsername(), $password);
+        } else {
+            accountDB::updateUser($_SESSION['accountID'], $username, $password);
+        }
 
         $message = "<p id='greenText'>Account updated successfully!</p>
        <p>" . $username . "</p>";
@@ -170,11 +174,26 @@ switch ($action) {
         break;
 
     case 'account-delete-action':
-        accountDB::removeUser($_SESSION['accountID']);
-        session_unset();
-        session_destroy();
-        $message = "<p id='greenText'>Account deleted successfully!</p>";
-        include('./view/result_page.php');
+        require("./required/fetchData-false.php");
+        $delConfirm = filter_input(INPUT_POST, 'delconfirm');
+
+        if (!isset($delConfirm)) {
+            $deleteConfirm = "Are you sure you want to delete your account?";
+            include('./view/profile.php');
+            die();
+        } elseif ($delConfirm == "1") {
+            postDB::removeAllPostsByAccountID($_SESSION['accountID']);
+            accountDB::removeUser($_SESSION['accountID']);
+            session_unset();
+            session_destroy();
+            $message = "<p id='greenText'>Account deleted successfully!</p>";
+            include('./view/result_page.php');
+            die();
+        } else {
+            $message = "<p id='redText'>Counter out of bounds, please reload the page!</p>";
+            include('./view/profile.php');
+            die();
+        }
         break;
 
     case 'post-add-action':
@@ -256,7 +275,7 @@ switch ($action) {
         $privacysetting = filter_input(INPUT_POST, 'privacysetting');
 
         $post = postDB::getPostByPostID($postID);
-        
+
         $fileName = $_FILES['file']['name'];
         $fileTmpName = $_FILES['file']['tmp_name'];
         $fileSize = $_FILES['file']['size'];
@@ -278,7 +297,7 @@ switch ($action) {
         if ($post['imgLocation'] != "") {
             unlink($post['imgLocation']);
         }
-        
+
         $postUpdateDate = date("Y-m-d h:i:s");
         postDB::updatePost($postID, $title, $postmessage, $fileDestination, $privacysetting, $postUpdateDate);
 
@@ -292,13 +311,18 @@ switch ($action) {
         $postUpdate = false;
         include("./view/profile.php");
         break;
-    
+
     case 'profileView':
         $username = filter_input(INPUT_GET, 'username');
+        if (!accountDB::checkUsername($username)) {
+            $message = "<p id='redText'>Error! Account could not be found.</p>";
+            include("./view/result_page.php");
+            die();
+        }
         $user = accountDB::getUser($username);
         $account = new account($user['accountID'], $user['username'], $user['email'], $user['accountType'], $user['fname'], $user['lname'], $user['bio']);
         $posts = postDB::getPublicPostsByAccountID($user['accountID']);
-        
+
         include("./view/profileView.php");
         break;
 }
