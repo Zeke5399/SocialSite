@@ -1,5 +1,7 @@
 <?php
 
+use Google\Cloud\Storage\StorageClient;
+
 $validator = new validation();
 if ($validator->emptyInput($title)) {
     $titleError = "Please enter a title!";
@@ -33,6 +35,30 @@ if (in_array($fileActualExt, $allowed)) {
             $fileNameNew = uniqid('', true) . "." . $fileActualExt;
             $fileDestination = "uploads/" . $fileNameNew;
             move_uploaded_file($fileTmpName, $fileDestination);
+
+            //Uploading to cloud
+            try {
+                $storage = new StorageClient([
+                    'keyFilePath' => getcwd() . '/zi5399-7439e7b3c462.json',
+                ]);
+
+                $bucketName = 'zi5399web-bucket';
+                $cloudFile = $fileDestination;
+                $bucket = $storage->bucket($bucketName);
+                $object = $bucket->upload(
+                        fopen($cloudFile, 'r'),
+                        [
+                            'predefinedAcl' => 'publicRead'
+                        ]
+                );
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+                include("./view/result_page.php");
+                exit();
+            }
+
+            unlink($fileDestination);
+            $fileDestination = "https://storage.googleapis.com/". $bucketName. "/". $fileNameNew;
         } else {
             $fileError = "File was too big!";
             include("./view/profile.php");

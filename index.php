@@ -1,5 +1,8 @@
 <?php
 
+require_once "vendor/autoload.php";
+use Google\Cloud\Storage\StorageClient;
+
 $lifetime = 60 * 60 * 24 * 14;    // 2 weeks in seconds
 session_set_cookie_params($lifetime, '/');
 session_start();
@@ -243,7 +246,22 @@ switch ($action) {
 
         //Remove image if there was one
         if ($post['imgLocation'] != "") {
-            unlink($post['imgLocation']);
+            //Needs work!!!!!!!
+            try {
+                $storage = new StorageClient([
+                    'keyFilePath' => getcwd() . '/zi5399-7439e7b3c462.json',
+                ]);
+
+                $bucketName = 'zi5399web-bucket';
+                $bucket = $storage->bucket($bucketName);
+                $object = $bucket->delete(
+                        fclose($post['imgLocation'], 'r'),
+                );
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+                include("./view/result_page.php");
+                exit();
+            }
         }
 
         postDB::removePost($postID);
@@ -295,7 +313,7 @@ switch ($action) {
 
         //Remove image if there was one
         if ($post['imgLocation'] != "") {
-            unlink($post['imgLocation']);
+//            unlink($post['imgLocation']);
         }
 
         $postUpdateDate = date("Y-m-d h:i:s");
