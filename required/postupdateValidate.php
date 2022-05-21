@@ -26,6 +26,14 @@ if ($validator->emptyInput($privacysetting)) {
     exit();
 }
 
+//Checks to see if you originally made the post.
+if (!$validator->validPostID($postID, $_SESSION['accountID'])) {
+    $message = "<p id='redText'>Error the post id is not associated with this account!</p>"
+            . "<p>Please reload your page.</p>";
+    include("./view/profile.php");
+    exit();
+}
+
 //File Validation
 if (in_array($fileActualExt, $allowed)) {
     if ($fileError === 0) {
@@ -49,14 +57,6 @@ if (in_array($fileActualExt, $allowed)) {
     $fileDestination = null;
 } else {
     $fileError = "You can't upload files of this type!";
-    include("./view/profile.php");
-    exit();
-}
-
-//Checks to see if you originally made the post.
-if (!$validator->validPostID($postID, $_SESSION['accountID'])) {
-    $message = "<p id='redText'>Error the post id is not associated with this account!</p>"
-            . "<p>Please reload your page.</p>";
     include("./view/profile.php");
     exit();
 }

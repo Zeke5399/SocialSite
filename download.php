@@ -24,9 +24,13 @@ if (isset($_GET['path'])) {
 //Terminate from the script
         die();
     } else {
-        echo "<p id='redText'>File does not exist.</p>" . "<p>". $filename. "</p>";
+        $message = "<p id='redText'>File does not exist.</p>" . "<p>" . $filename . "</p>";
+        include("./view/result_page.php");
+        exit();
     }
 } else {
-    echo "<p id='redText'>Filename is not defined.</p>" . "<p>". $filename. "</p>";
+    $message = "<p id='redText'>Filename is not defined.</p>" . "<p>" . $filename . "</p>";
+    include("./view/result_page.php");
+    exit();
 }
 ?>
