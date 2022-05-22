@@ -60,7 +60,7 @@ img {
 
 .postform {display: inline-block;}
 
-input[type=text], input[type=password], input[type=email] {
+input[type=text], input[type=password], input[type=email], input[type=date] {
     width: 50%;
 }
 

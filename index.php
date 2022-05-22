@@ -25,25 +25,7 @@ if ($action === null) {
 switch ($action) {
 //this will be the default display page
     case 'welcome_page':
-        $posts = postDB::getAllPublicPosts();
-        $count = 0;
-        $itemsPerPage = 10;
-        $pageCount = 0;
-        $pages = 1;
-        $currentPage = filter_input(INPUT_GET, 'page');
-        if ($currentPage == null) {
-            $currentPage = 1;
-        }
-        //Determines how many pages are needed.
-        foreach ($posts as $post) {
-            $count += 1;
-            $pageCount += 1;
-            if ($pageCount >= $itemsPerPage) {
-                $pages += 1;
-                $pageCount = 0;
-            }
-        }
-        $filteredPosts = postDB::getAllPublicPostsByPage($currentPage, $itemsPerPage);
+        require ("./required/base-welcomepage-tabs.php");
         include('./view/welcome_page.php');
         break;
 
@@ -359,8 +341,45 @@ switch ($action) {
             }
         }
         $filteredPosts = postDB::getPublicPostsByAccountIDByPage($user['accountID'], $currentPage, $itemsPerPage);
-        
+
         include("./view/profileView.php");
+        break;
+
+    case 'post-filter-action':
+        $filterMode = "yes";
+        
+        $title = filter_input(INPUT_POST, 'title');
+        $postDate = filter_input(INPUT_POST, 'postdate');
+        $beforeAfter = filter_input(INPUT_POST, 'beforeafter');
+
+        $titleError = "";
+        $postdateError = "";
+        $beforeafterError = "";
+
+        require("./required/postfilterValidate.php");
+        
+        $posts = postDB::getPostsByFilter($title, $postDate, $beforeAfter);
+
+        $count = 0;
+        $itemsPerPage = 10;
+        $pageCount = 0;
+        $pages = 1;
+        $currentPage = filter_input(INPUT_GET, 'page');
+        if ($currentPage == null) {
+            $currentPage = 1;
+        }
+        //Determines how many pages are needed.
+        foreach ($posts as $post) {
+            $count += 1;
+            $pageCount += 1;
+            if ($pageCount >= $itemsPerPage) {
+                $pages += 1;
+                $pageCount = 0;
+            }
+        }
+        $filteredPosts = postDB::getPostsByFilterByPage($title, $postDate, $beforeAfter, $currentPage, $itemsPerPage);
+        
+        include("./view/welcome_page.php");
         break;
 }
 ?>

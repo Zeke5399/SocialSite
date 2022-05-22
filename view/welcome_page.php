@@ -3,6 +3,8 @@
 <main>
     <br>
     <fieldset>
+        <?php include './view/post_filter_form.php'; ?>
+
         <h3>All Posts<?php
             if (isset($count)) {
                 echo " - " . $count;
@@ -10,11 +12,15 @@
             ?></h3>
 
         <?php
-        for ($page = 1; $page <= $pages; $page++) {
-            if ($page == $currentPage) {
-                echo "<a id='currentPage' href='./index.php?action=welcome_page&page=" . $page . "'> $page </a>";
-            } else {
-                echo "<a href='./index.php?action=welcome_page&page=" . $page . "'> $page </a>";
+        if (isset($filterMode)) {
+            
+        } else {
+            for ($page = 1; $page <= $pages; $page++) {
+                if ($page == $currentPage) {
+                    echo "<a id='currentPage' href='./index.php?action=welcome_page&page=" . $page . "'> $page </a>";
+                } else {
+                    echo "<a href='./index.php?action=welcome_page&page=" . $page . "'> $page </a>";
+                }
             }
         }
         ?>

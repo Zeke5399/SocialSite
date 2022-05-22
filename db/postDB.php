@@ -247,4 +247,98 @@ class postDB {
         return $resultCheck;
     }
 
+    public static function getPostsByFilter($title, $postDate, $beforeAfter) {
+        $method = null;
+        if ($beforeAfter == "before") {
+            $method = "<";
+        } elseif ($beforeAfter == "after") {
+            $method = ">";
+        }
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post');
+
+        if ($title != "" and $postDate != "") {
+            $query .= ' WHERE title LIKE :title AND postDate ' . $method . ' :postdate';
+            $title = "%" . $title . "%";
+        } elseif ($title != "") {
+            $query .= ' WHERE title LIKE :title';
+            $title = "%" . $title . "%";
+        } elseif ($postDate != "") {
+            $query .= ' WHERE postDate ' . $method . ' :postdate';
+        }
+
+        if ($beforeAfter == "after") {
+            $query .= ' ORDER BY postDate asc';
+        } else {
+            $query .= ' ORDER BY postDate desc';
+        }
+
+        $statement = $db->prepare($query);
+
+        if ($title != "") {
+            $statement->bindValue(':title', $title);
+        }
+        if ($postDate != "") {
+            $statement->bindValue(':postdate', $postDate);
+        }
+
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $statement->closeCursor();
+        return $row;
+    }
+
+    public static function getPostsByFilterByPage($title, $postDate, $beforeAfter, $currentPage, $itemsPerPage) {
+        $fetchStart = ($currentPage - 1) * $itemsPerPage;
+        $method = null;
+        if ($beforeAfter == "before") {
+            $method = "<";
+        } elseif ($beforeAfter == "after") {
+            $method = ">";
+        }
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post');
+
+        if ($title != "" and $postDate != "") {
+            $query .= ' WHERE title LIKE :title AND postDate ' . $method . ' :postdate';
+            $title = "%" . $title . "%";
+        } elseif ($title != "") {
+            $query .= ' WHERE title LIKE :title';
+            $title = "%" . $title . "%";
+        } elseif ($postDate != "") {
+            $query .= ' WHERE postDate ' . $method . ' :postdate';
+        }
+
+        if ($beforeAfter == "after") {
+            $query .= ' ORDER BY postDate asc';
+        } else {
+            $query .= ' ORDER BY postDate desc';
+        }
+        
+        $statement = $db->prepare($query);
+
+        if ($title != "") {
+            $statement->bindValue(':title', $title);
+        }
+        if ($postDate != "") {
+            $statement->bindValue(':postdate', $postDate);
+        }
+
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $filteredRow = array_slice($row, $fetchStart, $itemsPerPage);
+        $statement->closeCursor();
+        return $filteredRow;
+    }
+
 }
