@@ -1,7 +1,8 @@
 <form action="" method="POST">
     <h3>Filter Posts</h3>
     <input type="hidden" name="action" value="post-filter-action">
-        
+    <input type="hidden" name="filtermode" value="no">    
+    
     <label for="title">Title</label>
     <input id="title" name="title" type="text" value="<?php if(isset($title)) { echo $title;} ?>">
     <span id='redText'><?php if(isset($titleError) && $titleError != "") { echo "<br>". $titleError;} ?></span>

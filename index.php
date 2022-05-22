@@ -346,18 +346,31 @@ switch ($action) {
         break;
 
     case 'post-filter-action':
-        $filterMode = "yes";
+        $filterMode = filter_input(INPUT_POST, 'filtermode');
+        if ($filterMode == "") {
+            $filterMode = filter_input(INPUT_GET, 'filtermode');
+        }
+
+        $title = "";
+        $postDate = "";
+        $beforeAfter = "";
         
-        $title = filter_input(INPUT_POST, 'title');
-        $postDate = filter_input(INPUT_POST, 'postdate');
-        $beforeAfter = filter_input(INPUT_POST, 'beforeafter');
+        if ($filterMode == "yes") {
+            $title = filter_input(INPUT_GET, 'title');
+            $postDate = filter_input(INPUT_GET, 'postdate');
+            $beforeAfter = filter_input(INPUT_GET, 'beforeafter');
+        } elseif ($filterMode == "no") {
+            $title = filter_input(INPUT_POST, 'title');
+            $postDate = filter_input(INPUT_POST, 'postdate');
+            $beforeAfter = filter_input(INPUT_POST, 'beforeafter');
+        }
 
         $titleError = "";
         $postdateError = "";
         $beforeafterError = "";
 
         require("./required/postfilterValidate.php");
-        
+
         $posts = postDB::getPostsByFilter($title, $postDate, $beforeAfter);
 
         $count = 0;
@@ -378,7 +391,7 @@ switch ($action) {
             }
         }
         $filteredPosts = postDB::getPostsByFilterByPage($title, $postDate, $beforeAfter, $currentPage, $itemsPerPage);
-        
+
         include("./view/welcome_page.php");
         break;
 }

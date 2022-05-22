@@ -13,7 +13,13 @@
 
         <?php
         if (isset($filterMode)) {
-            
+            for ($page = 1; $page <= $pages; $page++) {
+                if ($page == $currentPage) {
+                    echo "<a id='currentPage' href='./index.php?action=post-filter-action&page=". $page ."&filtermode=yes&title=". $title ."&postdate=". $postDate ."&beforeafter=". $beforeAfter ."'> $page </a>";
+                } else {
+                    echo "<a href='./index.php?action=post-filter-action&page=". $page ."&filtermode=yes&title=". $title ."&postdate=". $postDate ."&beforeafter=". $beforeAfter ."'> $page </a>";
+                }
+            }
         } else {
             for ($page = 1; $page <= $pages; $page++) {
                 if ($page == $currentPage) {
