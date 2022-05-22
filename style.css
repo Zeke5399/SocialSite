@@ -112,6 +112,9 @@ a:hover {
     color: #77797A;
     border-bottom: 1px solid;
 }
+#currentPage {
+    color: black;
+}
 
 /* Tablet layout */
 @media only screen and (max-width: 1200px) {
@@ -154,18 +157,18 @@ a:hover {
 
     ul {
         /*  flex-wrap: wrap;*/
-/*        flex-direction: column;
-        display: flex;*/
+        /*        flex-direction: column;
+                display: flex;*/
         height: auto;
-/*        overflow-y: scroll;
-        margin: 0px;*/
+        /*        overflow-y: scroll;
+                margin: 0px;*/
     }
 
-/*    li {
-        flex: 1 0 25%;
-        text-align: left;
-        list-style-type: none;
-    }*/
+    /*    li {
+            flex: 1 0 25%;
+            text-align: left;
+            list-style-type: none;
+        }*/
 
     #copy{ font-size: 10px;}
 

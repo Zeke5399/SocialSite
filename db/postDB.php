@@ -33,7 +33,7 @@ class postDB {
         }
         $statement->closeCursor();
     }
-    
+
     public static function removeAllPostsByAccountID($accountID) {
         $db = dbh::getDB();
         $query = ('DELETE FROM post WHERE accountID = :accountid');
@@ -47,7 +47,7 @@ class postDB {
         }
         $statement->closeCursor();
     }
-    
+
     public static function updatePost($postID, $title, $message, $imgLocation, $privacysetting, $postUpdate) {
         $db = dbh::getDB();
         $query = ('UPDATE post SET title = :title, message = :message, imgLocation = :imglocation, privacySetting = :privacySetting, postUpdate = :postupdate WHERE postID = :postid');
@@ -65,8 +65,8 @@ class postDB {
             exit();
         }
         $statement->closeCursor();
-    } 
-    
+    }
+
     public static function getPostByTitle($title) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE title = :title');
@@ -97,7 +97,7 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-    
+
     public static function getAllPublicPosts() {
         $privacySetting = "public";
         $db = dbh::getDB();
@@ -115,6 +115,25 @@ class postDB {
         return $row;
     }
 
+    public static function getAllPublicPostsByPage($currentPage, $itemsPerPage) {
+        $fetchStart = ($currentPage - 1) * $itemsPerPage;
+        $privacySetting = "public";
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE privacySetting = :privacySetting ORDER BY postDate desc');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':privacySetting', $privacySetting);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $filteredRow = array_slice($row, $fetchStart, $itemsPerPage);
+        $statement->closeCursor();
+        return $filteredRow;
+    }
+
     public static function getPostsByAccountID($accountID) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE accountID = :accountid ORDER BY postDate desc');
@@ -130,7 +149,7 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-    
+
     public static function getPublicPostsByAccountID($accountID) {
         $privacySetting = "public";
         $db = dbh::getDB();
@@ -148,7 +167,27 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-    
+
+    public static function getPublicPostsByAccountIDByPage($accountID, $currentPage, $itemsPerPage) {
+        $fetchStart = ($currentPage - 1) * $itemsPerPage;
+        $privacySetting = "public";
+        $db = dbh::getDB();
+        $query = ('SELECT * FROM post WHERE accountID = :accountid AND privacySetting = :privacySetting ORDER BY postDate desc');
+        $statement = $db->prepare($query);
+        $statement->bindValue(':accountid', $accountID);
+        $statement->bindValue(':privacySetting', $privacySetting);
+        try {
+            $statement->execute();
+        } catch (Exception $e) {
+            include('./errors/dbError.php');
+            exit();
+        }
+        $row = $statement->fetchAll();
+        $filteredRow = array_slice($row, $fetchStart, $itemsPerPage);
+        $statement->closeCursor();
+        return $filteredRow;
+    }
+
     public static function getPostByPostID($postID) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE postID = :postid');
@@ -164,7 +203,7 @@ class postDB {
         $statement->closeCursor();
         return $row;
     }
-   
+
     public static function getPostByPostandAccountID($postID, $accountID) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE postID = :postid AND accountID = :accountid');
@@ -178,16 +217,15 @@ class postDB {
             exit();
         }
         $resultCheck;
-        if($statement->rowCount() > 0) {
+        if ($statement->rowCount() > 0) {
             $resultCheck = true;
-	}
-	else {
+        } else {
             $resultCheck = false;
-	}
+        }
         $statement->closeCursor();
-	return $resultCheck;
+        return $resultCheck;
     }
-    
+
     public static function checkPostsByAccountID($accountID) {
         $db = dbh::getDB();
         $query = ('SELECT * FROM post WHERE accountID = :accountid ORDER BY postDate desc');
@@ -200,14 +238,13 @@ class postDB {
             exit();
         }
         $resultCheck;
-        if($statement->rowCount() > 0) {
+        if ($statement->rowCount() > 0) {
             $resultCheck = true;
-	}
-	else {
+        } else {
             $resultCheck = false;
-	}
+        }
         $statement->closeCursor();
-	return $resultCheck;
+        return $resultCheck;
     }
-    
+
 }
